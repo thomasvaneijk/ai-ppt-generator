@@ -9,9 +9,14 @@ Follows strict architecture: JSON → Python → PowerPoint.
 import json
 from pathlib import Path
 from pptx import Presentation
-from pptx.util import Pt
+from pptx.util import Pt, Inches
 from pptx.chart.data import ChartData
 from pptx.enum.chart import XL_CHART_TYPE
+from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
+
+
+# Debug mode: Print placeholder details for troubleshooting
+DEBUG = True
 
 
 # Layout indices in template.pptx
@@ -25,6 +30,121 @@ LAYOUT_INDICES = {
 }
 
 
+# ============================================================================
+# Placeholder Detection Helpers
+# ============================================================================
+
+def debug_print_placeholders(slide, slide_type: str):
+    """Print all placeholder information for debugging."""
+    if not DEBUG:
+        return
+
+    print(f"\n[DEBUG] Placeholders for {slide_type} slide:")
+    if not hasattr(slide, 'shapes') or not hasattr(slide.shapes, 'placeholders'):
+        print("  No placeholders found")
+        return
+
+    for placeholder in slide.shapes.placeholders:
+        ph_type = "UNKNOWN"
+        try:
+            if hasattr(placeholder, 'placeholder_format'):
+                ph_type = placeholder.placeholder_format.type
+        except:
+            pass
+
+        shape_type = "UNKNOWN"
+        try:
+            shape_type = placeholder.shape_type
+        except:
+            pass
+
+        print(f"  - idx={placeholder.placeholder_format.idx}, type={ph_type}, shape_type={shape_type}")
+
+
+def get_title_placeholder(slide):
+    """
+    Find the title placeholder dynamically by type.
+
+    Returns the title placeholder or None if not found.
+    """
+    for shape in slide.shapes:
+        if shape.is_placeholder:
+            try:
+                if shape.placeholder_format.type == PP_PLACEHOLDER.TITLE:
+                    return shape
+            except:
+                pass
+    return None
+
+
+def get_body_placeholder(slide):
+    """
+    Find the body/content placeholder dynamically by type.
+
+    Returns the body placeholder or None if not found.
+    """
+    for shape in slide.shapes:
+        if shape.is_placeholder:
+            try:
+                ph_type = shape.placeholder_format.type
+                # Body can be BODY, OBJECT, or generic CONTENT
+                if ph_type in [PP_PLACEHOLDER.BODY, PP_PLACEHOLDER.OBJECT]:
+                    return shape
+            except:
+                pass
+    return None
+
+
+def get_chart_placeholder(slide):
+    """
+    Find the chart placeholder dynamically by type.
+
+    Returns the chart placeholder or None if not found.
+    """
+    for shape in slide.shapes:
+        if shape.is_placeholder:
+            try:
+                if shape.placeholder_format.type == PP_PLACEHOLDER.CHART:
+                    return shape
+            except:
+                pass
+
+    # Fallback: look for OBJECT type placeholder (sometimes charts are OBJECT type)
+    for shape in slide.shapes:
+        if shape.is_placeholder:
+            try:
+                if shape.placeholder_format.type == PP_PLACEHOLDER.OBJECT:
+                    # Check if it supports chart insertion
+                    if hasattr(shape, 'insert_chart'):
+                        return shape
+            except:
+                pass
+
+    return None
+
+
+def list_all_placeholders(slide) -> str:
+    """Return a formatted string listing all placeholders for error messages."""
+    if not hasattr(slide, 'shapes') or not hasattr(slide.shapes, 'placeholders'):
+        return "No placeholders found on slide"
+
+    result = []
+    for placeholder in slide.shapes.placeholders:
+        try:
+            idx = placeholder.placeholder_format.idx
+            ph_type = placeholder.placeholder_format.type
+            shape_type = placeholder.shape_type
+            result.append(f"  idx={idx}, type={ph_type}, shape_type={shape_type}")
+        except Exception as e:
+            result.append(f"  Error reading placeholder: {e}")
+
+    return "\n".join(result) if result else "No placeholders found"
+
+
+# ============================================================================
+# Slide Rendering Functions
+# ============================================================================
+
 def load_json_model(json_path: str) -> dict:
     """Load and parse the JSON slide model."""
     with open(json_path, 'r', encoding='utf-8') as f:
@@ -36,21 +156,29 @@ def create_title_slide(slide, slide_data: dict):
     Render a title slide.
 
     Expected layout:
-    - Placeholder 0: Title
-    - Placeholder 1: Subtitle
+    - Title placeholder
+    - Subtitle placeholder (body/content type)
     """
+    debug_print_placeholders(slide, "title")
+
     title = slide_data.get("title", "")
     subtitle = slide_data.get("content", {}).get("subtitle", "")
 
     # Set title
-    if len(slide.shapes.placeholders) > 0:
-        title_placeholder = slide.shapes.placeholders[0]
+    title_placeholder = get_title_placeholder(slide)
+    if title_placeholder:
         title_placeholder.text = title
+    else:
+        raise ValueError(
+            f"Title slide has no title placeholder.\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
+        )
 
-    # Set subtitle
-    if len(slide.shapes.placeholders) > 1:
-        subtitle_placeholder = slide.shapes.placeholders[1]
+    # Set subtitle (use body placeholder for subtitle)
+    subtitle_placeholder = get_body_placeholder(slide)
+    if subtitle_placeholder:
         subtitle_placeholder.text = subtitle
+    # Subtitle is optional, so no error if not found
 
     # Add speaker notes if present
     speaker_note = slide_data.get("speaker_note", "")
@@ -64,33 +192,45 @@ def create_key_insights_slide(slide, slide_data: dict):
     Render a key insights slide.
 
     Expected layout:
-    - Placeholder 0: Title
-    - Placeholder 1: Content (bullet points)
+    - Title placeholder
+    - Body/content placeholder (for bullet points)
     """
+    debug_print_placeholders(slide, "key_insights")
+
     title = slide_data.get("title", "")
     insights = slide_data.get("content", {}).get("insights", [])
 
     # Set title
-    if len(slide.shapes.placeholders) > 0:
-        title_placeholder = slide.shapes.placeholders[0]
+    title_placeholder = get_title_placeholder(slide)
+    if title_placeholder:
         title_placeholder.text = title
+    else:
+        raise ValueError(
+            f"Key insights slide has no title placeholder.\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
+        )
 
     # Set bullet points
-    if len(slide.shapes.placeholders) > 1:
-        content_placeholder = slide.shapes.placeholders[1]
-        text_frame = content_placeholder.text_frame
-        text_frame.clear()
+    body_placeholder = get_body_placeholder(slide)
+    if not body_placeholder:
+        raise ValueError(
+            f"Key insights slide has no body/content placeholder for bullets.\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
+        )
 
-        for idx, insight in enumerate(insights):
-            if idx == 0:
-                # First paragraph already exists
-                p = text_frame.paragraphs[0]
-            else:
-                # Add new paragraphs for subsequent items
-                p = text_frame.add_paragraph()
+    text_frame = body_placeholder.text_frame
+    text_frame.clear()
 
-            p.text = insight
-            p.level = 0
+    for idx, insight in enumerate(insights):
+        if idx == 0:
+            # First paragraph already exists
+            p = text_frame.paragraphs[0]
+        else:
+            # Add new paragraphs for subsequent items
+            p = text_frame.add_paragraph()
+
+        p.text = insight
+        p.level = 0
 
     # Add speaker notes if present
     speaker_note = slide_data.get("speaker_note", "")
@@ -104,8 +244,8 @@ def create_chart_slide(slide, slide_data: dict):
     Render a chart slide.
 
     Expected layout:
-    - Placeholder 0: Title
-    - Placeholder 1: Chart placeholder
+    - Title placeholder
+    - Chart placeholder
 
     Expected JSON content:
     {
@@ -116,19 +256,21 @@ def create_chart_slide(slide, slide_data: dict):
       }
     }
     """
+    debug_print_placeholders(slide, "chart")
+
     title = slide_data.get("title", "")
     content = slide_data.get("content", {})
     chart_type = content.get("chart_type", "column")
     data = content.get("data", {})
 
     # Set title
-    if len(slide.shapes.placeholders) > 0:
-        title_placeholder = slide.shapes.placeholders[0]
+    title_placeholder = get_title_placeholder(slide)
+    if title_placeholder:
         title_placeholder.text = title
     else:
         raise ValueError(
-            "Chart slide layout must have a title placeholder at index 0. "
-            "Check that template.pptx layout index 2 is correctly configured."
+            f"Chart slide has no title placeholder.\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
         )
 
     # Validate chart data structure
@@ -180,27 +322,58 @@ def create_chart_slide(slide, slide_data: dict):
 
     xl_chart_type = chart_type_map[chart_type]
 
-    # Find and validate chart placeholder
-    if len(slide.shapes.placeholders) < 2:
+    # Find chart placeholder dynamically
+    chart_placeholder = get_chart_placeholder(slide)
+
+    if not chart_placeholder:
         raise ValueError(
-            f"Chart slide layout must have at least 2 placeholders (title + chart). "
-            f"Found {len(slide.shapes.placeholders)}. "
-            f"Check that template.pptx layout index 2 has a chart placeholder."
+            f"Chart slide has no chart placeholder (type CHART or OBJECT).\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}\n"
+            f"Please verify that layout index 2 in template.pptx has a Chart placeholder."
         )
 
-    # Insert chart into placeholder 1
+    # Try to insert chart using placeholder
+    chart = None
     try:
-        chart_placeholder = slide.shapes.placeholders[1]
+        if DEBUG:
+            print(f"[DEBUG] Attempting insert_chart on placeholder...")
         chart = chart_placeholder.insert_chart(xl_chart_type, chart_data)
-    except AttributeError:
-        raise ValueError(
-            f"Placeholder at index 1 in layout 2 is not a chart placeholder. "
-            f"In PowerPoint, ensure layout index 2 has a 'Chart' content placeholder, not just a text box."
-        )
+        if DEBUG:
+            print(f"[DEBUG] ✓ Chart inserted successfully via placeholder")
+    except AttributeError as e:
+        # Placeholder doesn't support insert_chart, fallback to add_chart
+        if DEBUG:
+            print(f"[DEBUG] insert_chart not supported, falling back to add_chart: {e}")
+        try:
+            # Get placeholder position and size
+            x = chart_placeholder.left
+            y = chart_placeholder.top
+            cx = chart_placeholder.width
+            cy = chart_placeholder.height
+
+            # Add chart at placeholder position
+            chart = slide.shapes.add_chart(
+                xl_chart_type, x, y, cx, cy, chart_data
+            )
+            if DEBUG:
+                print(f"[DEBUG] ✓ Chart added successfully via add_chart fallback")
+        except Exception as fallback_error:
+            raise ValueError(
+                f"Failed to insert chart using both methods:\n"
+                f"  1. insert_chart: {str(e)}\n"
+                f"  2. add_chart: {str(fallback_error)}\n"
+                f"Available placeholders:\n{list_all_placeholders(slide)}"
+            )
     except Exception as e:
         raise ValueError(
-            f"Failed to insert chart into placeholder: {str(e)}. "
-            f"Verify that template.pptx layout index 2 has a proper chart placeholder."
+            f"Failed to insert chart into placeholder: {str(e)}\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
+        )
+
+    if not chart:
+        raise ValueError(
+            f"Chart creation failed for unknown reason.\n"
+            f"Available placeholders:\n{list_all_placeholders(slide)}"
         )
 
     # Add speaker notes if present
