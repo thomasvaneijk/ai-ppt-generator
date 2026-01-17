@@ -1,44 +1,30 @@
 {
   "presentation": {
-    "title": "Customer Satisfaction Performance Review",
-    "subtitle": "KTV Analysis & Strategic Priorities",
+    "title": "The Customer Voice",
+    "subtitle": "What 12 Months of Feedback Tells Us",
     "language": "en",
     "audience": "senior_management",
     "slides": [
       {
         "slide_number": 1,
         "type": "title",
-        "title": "Customer Satisfaction Performance Review",
+        "title": "The Customer Voice",
         "content": {
-          "subtitle": "KTV Analysis & Strategic Priorities"
+          "subtitle": "What 12 Months of Satisfaction Data Tells Us About Where We Excel—and Where We're Losing Trust"
         },
-        "visuals": {},
-        "speaker_note": "12-month KTV analysis covering all customer journeys with concrete improvement recommendations for management decision."
+        "visuals": {
+          "description": "Abstract visual of customer feedback/listening - speech bubbles, sound waves, or voice concept. Professional, modern, not cliché."
+        },
+        "speaker_note": "This is not a data review—it's about listening to what customers are telling us through their satisfaction scores. The story: we know how to deliver excellence, but we're not doing it everywhere."
       },
       {
         "slide_number": 2,
-        "type": "key_insights",
-        "title": "Executive Summary",
-        "content": {
-          "bullets": [
-            "Maintenance journey achieves strong performance at 8.1 KTV—above our 8.0 excellence threshold",
-            "Breakdown & Repair journey scores 7.2, falling below the 7.5 attention threshold and representing our primary risk area",
-            "Purchase journey (7.8) and Customer Service (7.4) perform adequately but show clear opportunity for improvement",
-            "Root cause analysis reveals communication clarity and waiting time transparency as key satisfaction drivers",
-            "Strategic opportunity: replicate Maintenance excellence across underperforming journeys"
-          ]
-        },
-        "visuals": {},
-        "speaker_note": "Key message: We have a proven model for high satisfaction in Maintenance. The challenge is scaling those practices to Breakdown and Customer Service."
-      },
-      {
-        "slide_number": 3,
         "type": "chart",
-        "title": "Customer Journey Performance Overview",
+        "title": "The Performance Gap",
         "content": {
           "chart_type": "column",
           "data": {
-            "categories": ["Maintenance", "Purchase Journey", "Customer Service", "Breakdown & Repair"],
+            "categories": ["Maintenance", "Purchase", "Customer Service", "Breakdown"],
             "series": [
               {
                 "name": "KTV Score",
@@ -47,118 +33,102 @@
             ]
           }
         },
-        "visuals": {},
-        "speaker_note": "Note the 0.9-point gap between highest (Maintenance) and lowest (Breakdown). This is not marginal—it represents fundamentally different customer experiences."
+        "visuals": {
+          "description": "Emphasize the 0.9-point gap visually - use color contrast (green for 8.1, red/amber for 7.2). Add threshold lines at 8.0 (excellence) and 7.5 (attention required)."
+        },
+        "speaker_note": "This is the story in one chart: Maintenance at 8.1 proves we can deliver. Breakdown at 7.2 proves we're not. That 0.9-point gap isn't data—it's customers telling us we're inconsistent."
+      },
+      {
+        "slide_number": 3,
+        "type": "key_insights",
+        "title": "What Excellence Looks Like",
+        "content": {
+          "bullets": [
+            "Maintenance scores 8.1 because customers know exactly what to expect—and we deliver it",
+            "Scheduled appointments, confirmed time windows, proactive technician updates",
+            "Formula: clear communication + predictable delivery + professional execution",
+            "This isn't exceptional service—it's baseline clarity done consistently well",
+            "Proof point: we already know how to make customers happy"
+          ]
+        },
+        "visuals": {
+          "description": "Visual metaphor for success: upward arrow, checkmarks, clear pathway, or 'blueprint' concept. Positive, confident tone."
+        },
+        "speaker_note": "Maintenance is our North Star. It's not magic—it's process discipline and communication hygiene. The question isn't 'can we do this?' It's 'why aren't we doing it everywhere?'"
       },
       {
         "slide_number": 4,
         "type": "key_insights",
-        "title": "Success Blueprint: Maintenance Journey",
+        "title": "Where We're Losing Them",
         "content": {
           "bullets": [
-            "Maintenance achieves 8.1 KTV through clear communication and predictable service delivery",
-            "Customers value scheduled appointments with confirmed time windows and proactive updates",
-            "Technicians consistently praised for punctuality and professional execution",
-            "Gas boiler maintenance contracts benefit from established routines and customer familiarity",
-            "Proven formula: clarity + predictability + professionalism = high satisfaction"
+            "Breakdown scores 7.2 because customers are stressed and we're leaving them in the dark",
+            "Waiting for technicians, waiting for parts, waiting for updates—uncertainty compounds anxiety",
+            "Heat pumps and boilers break in winter—this isn't inconvenience, it's crisis for customers",
+            "The problem isn't technical response time. It's communication during the wait",
+            "Result: we fix the problem but lose their trust in the process"
           ]
         },
-        "visuals": {},
-        "speaker_note": "Maintenance is our benchmark. It proves we can deliver excellent customer experiences when process and communication are aligned."
+        "visuals": {
+          "description": "Visual metaphor for uncertainty/frustration: question marks, broken connection, fog/unclear path, or contrast to previous slide's clarity. Empathetic, not alarmist."
+        },
+        "speaker_note": "Customers don't expect instant repairs. They expect to know what's happening. When a heat pump fails in January and we go silent, we're not just slow—we're invisible."
       },
       {
         "slide_number": 5,
         "type": "key_insights",
-        "title": "Critical Challenge: Breakdown Journey",
+        "title": "The Pattern: Communication Drives Everything",
         "content": {
           "bullets": [
-            "Breakdown & Repair scores 7.2, driven by inherent customer stress during service disruption",
-            "Waiting times for technician arrival and parts delivery create frustration and uncertainty",
-            "Unclear next steps and status updates amplify customer anxiety during breakdown situations",
-            "Heat pump and boiler breakdowns particularly challenging due to heating dependency",
-            "Gap to Maintenance (0.9 points) indicates fixable process issues, not technical capability"
+            "High satisfaction = customers know what's happening and when it will happen",
+            "Low satisfaction = customers are uncertain about status, timeline, or next steps",
+            "Purchase journey (7.8) succeeds because onboarding sets expectations early",
+            "Customer Service (7.4) struggles not because staff are unfriendly, but because resolution feels slow and opaque",
+            "The fix isn't better products or more resources—it's transparency at every touchpoint"
           ]
         },
-        "visuals": {},
-        "speaker_note": "Customers don't expect instant repairs—they expect transparency. The problem isn't our technical response; it's communication during uncertainty."
+        "visuals": {
+          "description": "Visual diagram: communication as the connecting thread across all journeys. Could be a simple network diagram, flow concept, or 'clarity = satisfaction' visual equation."
+        },
+        "speaker_note": "This is the insight that changes everything: satisfaction correlates more with communication quality than outcome quality. We don't need to be faster—we need to be clearer."
       },
       {
         "slide_number": 6,
-        "type": "key_insights",
-        "title": "Root Cause Analysis",
+        "type": "recommendation",
+        "title": "The Path Forward",
         "content": {
-          "bullets": [
-            "Clear communication and punctuality are the strongest drivers of satisfaction across all journeys",
-            "Waiting times damage satisfaction only when combined with unclear status updates or uncertain timelines",
-            "Purchase journey (7.8) succeeds because onboarding sets clear expectations from the start",
-            "Customer Service (7.4) faces similar challenges to Breakdown: responsiveness perceived as slow despite friendly interactions",
-            "Pattern: customers reward transparency and predictability, penalize uncertainty"
+          "recommendation": "Replicate Maintenance communication standards across Breakdown and Customer Service journeys—starting in 30 days",
+          "rationale": [
+            "Maintenance already proves the model works: we have the blueprint, we just need to scale it",
+            "Breakdown and Customer Service fail for the same reason: customers lack visibility into progress",
+            "Communication improvements are low-cost, high-impact—no new systems, just process discipline"
+          ],
+          "next_steps": [
+            "Week 1-2: Deploy automated status updates for breakdown requests (ETA, technician assigned, parts status)",
+            "Week 3-4: Train customer service teams on Maintenance confirmation protocols (resolution timeline, follow-up cadence)",
+            "Month 2: Launch KTV dashboard with journey targets and weekly review rhythm",
+            "Month 3: Customer feedback sessions on heat pump and solar panel experiences to validate improvements"
           ]
         },
-        "visuals": {},
-        "speaker_note": "This is the insight: satisfaction correlates more strongly with communication quality than with technical outcomes. Fix communication, fix satisfaction."
+        "visuals": {
+          "description": "Visual roadmap or timeline showing 30-day implementation path. Progressive steps, forward momentum. Not a Gantt chart—a journey visual."
+        },
+        "speaker_note": "This isn't a transformation project—it's a replication project. We know what works. Now we execute."
       },
       {
         "slide_number": 7,
-        "type": "two_column",
-        "title": "Strategic Assessment",
-        "content": {
-          "left_column": {
-            "heading": "What Works",
-            "items": [
-              "Maintenance journey delivers 8.1+ satisfaction through structured communication",
-              "Purchase onboarding creates clear customer expectations",
-              "Technical quality and end results consistently meet customer needs"
-            ]
-          },
-          "right_column": {
-            "heading": "What Needs Attention",
-            "items": [
-              "Breakdown journey requires proactive status updates and clearer timelines",
-              "Customer Service response times need improvement or better expectation setting",
-              "Waiting time transparency missing across multiple touchpoints"
-            ]
-          }
-        },
-        "visuals": {},
-        "speaker_note": "Left side shows we know how to deliver. Right side shows where to apply that knowledge. This is an execution gap, not a capability gap."
-      },
-      {
-        "slide_number": 8,
-        "type": "recommendation",
-        "title": "Action Plan: Close the Experience Gap",
-        "content": {
-          "recommendation": "Deploy Maintenance journey communication standards to Breakdown and Customer Service, focusing on proactive updates and clear timeline expectations",
-          "rationale": [
-            "Maintenance journey proves that structured communication drives satisfaction—we have the blueprint",
-            "Breakdown and Customer Service share the same root issue: customers lack visibility into progress and next steps",
-            "Communication improvements require minimal investment compared to operational changes, yet deliver measurable satisfaction gains"
-          ],
-          "next_steps": [
-            "Implement automated status updates for breakdown service requests (ETA, technician assigned, parts ordered)",
-            "Adopt Maintenance-style confirmation protocols for customer service interactions (expected resolution time, follow-up schedule)",
-            "Establish KTV monitoring dashboard with journey-specific targets and monthly review cadence",
-            "Conduct customer feedback sessions specifically on heat pump and solar panel service experiences to identify product-specific pain points"
-          ]
-        },
-        "visuals": {},
-        "speaker_note": "This is a scale problem, not an innovation problem. We're not asking for new capabilities—we're replicating what already works in Maintenance."
-      },
-      {
-        "slide_number": 9,
         "type": "appendix",
-        "title": "Methodology & Context",
+        "title": "Methodology",
         "content": {
           "items": [
-            "KTV measured on 1-10 scale, collected post-interaction across all customer touchpoints",
-            "Data period: Rolling 12-month average",
-            "Performance benchmarks: >8.0 considered strong, <7.5 requires attention",
-            "Journeys analyzed: Maintenance, Breakdown & Repair, Purchase, Customer Service",
-            "Products in scope: Gas boiler maintenance contracts, Heat pumps, Solar panels"
+            "KTV scores: 1-10 scale, collected post-interaction (12-month rolling average)",
+            "Thresholds: >8.0 = strong performance, <7.5 = requires attention",
+            "Journeys: Maintenance, Breakdown & Repair, Purchase, Customer Service",
+            "Products: Gas boiler maintenance contracts, Heat pumps, Solar panels"
           ]
         },
         "visuals": {},
-        "speaker_note": "All scores validated through customer feedback system. Qualitative insights based on verbatim analysis and support ticket themes."
+        "speaker_note": "Data validated through customer feedback management system. Qualitative insights from verbatim analysis."
       }
     ]
   }
