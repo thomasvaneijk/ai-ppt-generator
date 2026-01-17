@@ -1,0 +1,19 @@
+{
+  "max_iterations": 3,
+  "target_score": 8.0,
+  "rendering": {
+    "resolution_width": 1920,
+    "resolution_height": 1080,
+    "output_directory": "renders"
+  },
+  "critique": {
+    "min_acceptable_score": 7.0,
+    "focus_areas": [
+      "alignment",
+      "text_density",
+      "visual_hierarchy",
+      "white_space",
+      "clarity"
+    ]
+  }
+}

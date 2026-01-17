@@ -1,1 +1,5 @@
 python-pptx==0.6.23
+
+# Visual feedback loop (Windows only)
+# Install with: pip install pywin32
+# pywin32>=305  # Uncomment on Windows for slide rendering
