@@ -1,19 +1,19 @@
 {
   "presentation": {
-    "title": "Q4 Customer Churn Overview",
-    "subtitle": "Strategic Analysis & Retention Priorities",
+    "title": "Customer Satisfaction Analysis 2024",
+    "subtitle": "KTV Performance Review & Strategic Priorities",
     "language": "en",
     "audience": "senior_management",
     "slides": [
       {
         "slide_number": 1,
         "type": "title",
-        "title": "Q4 Customer Churn Overview",
+        "title": "Customer Satisfaction Analysis 2024",
         "content": {
-          "subtitle": "Strategic Analysis & Retention Priorities"
+          "subtitle": "KTV Performance Review & Strategic Priorities"
         },
         "visuals": {},
-        "speaker_note": "Focus on the strategic imperative: churn is accelerating and requires immediate executive attention."
+        "speaker_note": "This presentation covers 12 months of customer satisfaction data across all journeys and products, with clear recommendations for improvement."
       },
       {
         "slide_number": 2,
@@ -21,110 +21,147 @@
         "title": "Executive Summary",
         "content": {
           "bullets": [
-            "Customer churn increased to 5.2% in Q4, up from 4.6% in Q3",
-            "Continuous upward trend observed throughout the year (Q1: 4.1% → Q4: 5.2%)",
-            "Residential customer segment shows highest churn acceleration",
-            "Three primary drivers identified: price sensitivity, communication gaps, and competitive pressure",
-            "Immediate strategic intervention required to reverse trend"
+            "Overall customer satisfaction averaged 7.6 over the past year—solid but with clear room for improvement",
+            "Maintenance journey achieves highest satisfaction (8.1), setting the benchmark for process excellence",
+            "Breakdown journey scores lowest (7.2), driven by waiting times and unclear follow-up communication",
+            "Product performance ranges from 7.3 to 8.0, with heat pumps requiring focused attention on planning and communication",
+            "Strategic opportunity: replicate Maintenance strengths in underperforming journeys"
           ]
         },
         "visuals": {},
-        "speaker_note": "Emphasize that this is not a one-quarter blip—it's a sustained trend that demands action."
+        "speaker_note": "Key message: We have a proven playbook for high satisfaction (Maintenance), and clear data on where to focus improvement efforts."
       },
       {
         "slide_number": 3,
         "type": "chart",
-        "title": "Quarterly Churn Progression",
+        "title": "Satisfaction by Customer Journey",
         "content": {
-          "chart_type": "line",
+          "chart_type": "column",
           "data": {
-            "categories": ["Q1", "Q2", "Q3", "Q4"],
+            "categories": ["Maintenance", "Breakdown", "Purchase", "Customer Service"],
             "series": [
               {
-                "name": "Churn Rate (%)",
-                "values": [4.1, 4.3, 4.6, 5.2]
+                "name": "Average KTV Score",
+                "values": [8.1, 7.2, 7.8, 7.4]
               }
             ]
           }
         },
         "visuals": {},
-        "speaker_note": "Point out the consistent quarter-over-quarter increase. The slope is steepening, not flattening."
+        "speaker_note": "Maintenance sets the gold standard at 8.1. Breakdown lags significantly at 7.2—nearly a full point below. This gap represents our primary improvement opportunity."
       },
       {
         "slide_number": 4,
-        "type": "key_insights",
-        "title": "Primary Churn Drivers",
+        "type": "chart",
+        "title": "Satisfaction by Product Category",
         "content": {
-          "bullets": [
-            "Price sensitivity remains the dominant factor driving customer exits",
-            "Communication issues indicate gaps in customer engagement and support responsiveness",
-            "Competitive offers suggest our value proposition requires reinforcement",
-            "Residential segment particularly vulnerable to all three drivers",
-            "Combined effect creates compound risk in customer base stability"
-          ]
-        },
-        "visuals": {},
-        "speaker_note": "These are not isolated issues—they reinforce each other. A customer frustrated by communication is more price-sensitive."
-      },
-      {
-        "slide_number": 5,
-        "type": "two_column",
-        "title": "Observations & Implications",
-        "content": {
-          "left_column": {
-            "heading": "What We Observe",
-            "items": [
-              "Churn rate increased 0.6 percentage points in one quarter",
-              "Residential customers disproportionately affected",
-              "Trend accelerating rather than stabilizing"
-            ]
-          },
-          "right_column": {
-            "heading": "What It Means",
-            "items": [
-              "Revenue risk compounding if trend continues",
-              "Customer acquisition costs not offset by retention",
-              "Market positioning weakening in core segment"
+          "chart_type": "column",
+          "data": {
+            "categories": ["Maintenance Contracts", "Heat Pumps", "Solar Panels", "Boilers"],
+            "series": [
+              {
+                "name": "Average KTV Score",
+                "values": [8.0, 7.3, 7.9, 7.5]
+              }
             ]
           }
         },
         "visuals": {},
-        "speaker_note": "Translate the numbers into business impact. This is about revenue, profitability, and competitive position."
+        "speaker_note": "Maintenance contracts perform strongest, while heat pumps show the most opportunity for improvement. The 0.7-point spread indicates meaningful variation in customer experience."
+      },
+      {
+        "slide_number": 5,
+        "type": "key_insights",
+        "title": "What Drives High Satisfaction",
+        "content": {
+          "bullets": [
+            "Maintenance journey scores 8.1 due to clear, proactive communication throughout the process",
+            "Customers value predictable scheduling and transparent expectations setting",
+            "Technician professionalism and first-time-right execution consistently praised",
+            "Maintenance contracts (8.0) benefit from ongoing relationship and familiarity",
+            "Success formula: clarity + predictability + communication = satisfaction"
+          ]
+        },
+        "visuals": {},
+        "speaker_note": "Maintenance is our proof point. Customers reward us when we set clear expectations, communicate proactively, and deliver consistently."
       },
       {
         "slide_number": 6,
-        "type": "recommendation",
-        "title": "Strategic Retention Plan",
+        "type": "key_insights",
+        "title": "Critical Improvement Areas",
         "content": {
-          "recommendation": "Implement targeted retention program focused on residential segment with pricing flexibility and proactive communication",
-          "rationale": [
-            "Residential segment represents highest churn acceleration and immediate intervention opportunity",
-            "Price sensitivity can be addressed through tiered offers and loyalty incentives",
-            "Communication improvements deliver quick wins with minimal capital investment"
-          ],
-          "next_steps": [
-            "Launch customer feedback program within 2 weeks to validate drivers",
-            "Develop competitive pricing analysis and retention offer framework",
-            "Implement proactive outreach protocol for at-risk residential accounts"
+          "bullets": [
+            "Breakdown journey (7.2) suffers from excessive waiting times and unclear status updates during resolution",
+            "Customer service (7.4) receives praise for friendliness but criticism for long handling times",
+            "Heat pump customers (7.3) are satisfied with end results but frustrated by planning delays and communication gaps",
+            "Common thread: uncertainty and waiting time erode satisfaction across all pain points",
+            "Root cause: operational execution issues, not product or service quality"
           ]
         },
         "visuals": {},
-        "speaker_note": "This recommendation balances quick wins (communication) with strategic positioning (pricing). Emphasize the 2-week timeline for feedback."
+        "speaker_note": "The problems are operational and fixable. Customers aren't questioning our technical quality—they're frustrated by process inefficiencies and communication gaps."
       },
       {
         "slide_number": 7,
-        "type": "appendix",
-        "title": "Data Sources & Methodology",
+        "type": "two_column",
+        "title": "Strategic Assessment",
         "content": {
-          "items": [
-            "Churn rates: Customer database (CRM system)",
-            "Quarterly calculations: Month-end snapshots Q1-Q4 2024",
-            "Churn reasons: Exit survey responses and support ticket analysis",
-            "Residential segment: Defined as non-business accounts"
+          "left_column": {
+            "heading": "Our Strengths",
+            "items": [
+              "Maintenance process delivers 8.1 satisfaction through clear communication",
+              "Technical quality and end results consistently meet expectations",
+              "Customer service teams praised for professionalism and friendliness"
+            ]
+          },
+          "right_column": {
+            "heading": "Improvement Opportunities",
+            "items": [
+              "Breakdown response times and status communication require immediate attention",
+              "Heat pump planning and scheduling processes need streamlining",
+              "Customer service handling times impacting overall experience despite strong interpersonal skills"
+            ]
+          }
+        },
+        "visuals": {},
+        "speaker_note": "This is not a product problem or a people problem—it's a process problem. We have the blueprint for success in Maintenance; we need to scale it."
+      },
+      {
+        "slide_number": 8,
+        "type": "recommendation",
+        "title": "Recommended Action Plan",
+        "content": {
+          "recommendation": "Implement Maintenance communication playbook across Breakdown and Heat Pump journeys, with immediate focus on status transparency and expectation management",
+          "rationale": [
+            "Maintenance journey proves that proactive communication drives satisfaction—we already know what works",
+            "Breakdown and Heat Pump journeys share the same root cause: unclear status updates and uncertain timelines",
+            "Customer service handling time can be reduced through process optimization, not headcount increases"
+          ],
+          "next_steps": [
+            "Deploy Maintenance communication templates to Breakdown teams within 30 days",
+            "Implement automated status updates for heat pump planning and installation phases",
+            "Conduct process mapping workshop for customer service to identify handling time bottlenecks",
+            "Establish monthly KTV monitoring dashboard with journey-specific targets"
           ]
         },
         "visuals": {},
-        "speaker_note": "All data has been validated and cross-referenced. Exit surveys had 68% response rate."
+        "speaker_note": "This recommendation is low-cost and high-impact. We're not inventing new solutions—we're scaling proven practices from Maintenance to underperforming areas."
+      },
+      {
+        "slide_number": 9,
+        "type": "appendix",
+        "title": "Methodology & Scope",
+        "content": {
+          "items": [
+            "Data period: 12-month rolling average (past year)",
+            "Measurement: KTV score (1-10 scale) collected post-interaction",
+            "Journeys analyzed: Maintenance, Breakdown, Purchase, Customer Service",
+            "Products analyzed: Maintenance contracts, Heat pumps, Solar panels, Boilers",
+            "Qualitative feedback: Customer verbatims analyzed for recurring themes"
+          ]
+        },
+        "visuals": {},
+        "speaker_note": "All data validated through customer feedback management system. Minimum sample sizes met for statistical reliability across all segments."
       }
     ]
   }
