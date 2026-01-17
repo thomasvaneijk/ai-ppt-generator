@@ -39,32 +39,32 @@ def debug_print_placeholders(slide, slide_type: str):
     if not DEBUG:
         return
 
-    print(f"\n[DEBUG] Placeholders for {slide_type} slide:")
+    print(f"\n[DEBUG] Placeholders for {slide_type}:")
     if not hasattr(slide, 'shapes') or not hasattr(slide.shapes, 'placeholders'):
         print("  No placeholders found")
         return
 
     for placeholder in slide.shapes.placeholders:
         ph_type = "UNKNOWN"
-        try:
-            if hasattr(placeholder, 'placeholder_format'):
-                ph_type = placeholder.placeholder_format.type
-        except:
-            pass
-
-        shape_type = "UNKNOWN"
-        try:
-            shape_type = placeholder.shape_type
-        except:
-            pass
-
         idx = "UNKNOWN"
+        shape_type = "UNKNOWN"
+
         try:
             idx = placeholder.placeholder_format.idx
         except:
             pass
 
-        print(f"  - idx={idx}, type={ph_type}, shape_type={shape_type}")
+        try:
+            ph_type = placeholder.placeholder_format.type
+        except:
+            pass
+
+        try:
+            shape_type = placeholder.shape_type
+        except:
+            pass
+
+        print(f"  idx={idx}, type={ph_type}, shape_type={shape_type}")
 
 
 def get_title_placeholder(slide):
@@ -97,7 +97,6 @@ def get_body_placeholder(slide):
         if shape.is_placeholder:
             try:
                 ph_type = shape.placeholder_format.type
-                # Body can be BODY, OBJECT, or generic CONTENT
                 if ph_type in [PP_PLACEHOLDER.BODY, PP_PLACEHOLDER.OBJECT]:
                     return shape
             except:
@@ -177,7 +176,7 @@ def create_title_slide(slide, slide_data: dict):
     title = slide_data.get("title", "")
     subtitle = slide_data.get("content", {}).get("subtitle", "")
 
-    # Set title
+    # Set title using dynamic detection
     title_placeholder = get_title_placeholder(slide)
     if title_placeholder:
         title_placeholder.text = title
@@ -187,11 +186,10 @@ def create_title_slide(slide, slide_data: dict):
             f"Available placeholders:\n{list_all_placeholders(slide)}"
         )
 
-    # Set subtitle (use body placeholder for subtitle)
+    # Set subtitle using body placeholder
     subtitle_placeholder = get_body_placeholder(slide)
     if subtitle_placeholder:
         subtitle_placeholder.text = subtitle
-    # Subtitle is optional, so no error if not found
 
     # Add speaker notes if present
     speaker_note = slide_data.get("speaker_note", "")
@@ -211,9 +209,9 @@ def create_key_insights_slide(slide, slide_data: dict):
     debug_print_placeholders(slide, "key_insights")
 
     title = slide_data.get("title", "")
-    insights = slide_data.get("content", {}).get("insights", [])
+    bullets = slide_data.get("content", {}).get("bullets", [])
 
-    # Set title
+    # Set title using dynamic detection
     title_placeholder = get_title_placeholder(slide)
     if title_placeholder:
         title_placeholder.text = title
@@ -223,7 +221,7 @@ def create_key_insights_slide(slide, slide_data: dict):
             f"Available placeholders:\n{list_all_placeholders(slide)}"
         )
 
-    # Set bullet points
+    # Set bullet points using body placeholder
     body_placeholder = get_body_placeholder(slide)
     if not body_placeholder:
         raise ValueError(
@@ -234,15 +232,13 @@ def create_key_insights_slide(slide, slide_data: dict):
     text_frame = body_placeholder.text_frame
     text_frame.clear()
 
-    for idx, insight in enumerate(insights):
+    for idx, bullet in enumerate(bullets):
         if idx == 0:
-            # First paragraph already exists
             p = text_frame.paragraphs[0]
         else:
-            # Add new paragraphs for subsequent items
             p = text_frame.add_paragraph()
 
-        p.text = insight
+        p.text = bullet
         p.level = 0
 
     # Add speaker notes if present
@@ -276,7 +272,7 @@ def create_chart_slide(slide, slide_data: dict):
     chart_type = content.get("chart_type", "column")
     data = content.get("data", {})
 
-    # Set title
+    # Set title using dynamic detection
     title_placeholder = get_title_placeholder(slide)
     if title_placeholder:
         title_placeholder.text = title
@@ -335,7 +331,7 @@ def create_chart_slide(slide, slide_data: dict):
 
     xl_chart_type = chart_type_map[chart_type]
 
-    # Find chart placeholder dynamically
+    # Find chart placeholder using dynamic detection
     chart_placeholder = get_chart_placeholder(slide)
 
     if not chart_placeholder:
@@ -429,7 +425,7 @@ def validate_template(prs: Presentation):
     Raises detailed error messages if the template is misconfigured.
     """
     num_layouts = len(prs.slide_layouts)
-    required_layouts = max(LAYOUT_INDICES.values()) + 1  # Indices are 0-based
+    required_layouts = max(LAYOUT_INDICES.values()) + 1
 
     if num_layouts < required_layouts:
         raise ValueError(
@@ -441,7 +437,6 @@ def validate_template(prs: Presentation):
 
     print(f"✓ Template validated: {num_layouts} layouts found")
 
-    # Warn about chart layout (most common misconfiguration)
     chart_layout_index = LAYOUT_INDICES.get("chart")
     if chart_layout_index is not None:
         chart_layout = prs.slide_layouts[chart_layout_index]
@@ -458,18 +453,13 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
         json_path: Path to claude_output.json
         output_path: Path to save output.pptx
     """
-    # Load template
     prs = Presentation(template_path)
-
-    # Validate template structure
     validate_template(prs)
 
-    # Load JSON model
     data = load_json_model(json_path)
     presentation_data = data.get("presentation", {})
     slides_data = presentation_data.get("slides", [])
 
-    # Generate each slide
     for slide_data in slides_data:
         slide_type = slide_data.get("type")
 
@@ -481,12 +471,10 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
             print(f"Warning: No handler for slide type '{slide_type}', skipping slide {slide_data.get('slide_number')}")
             continue
 
-        # Create slide with appropriate layout
         layout_index = LAYOUT_INDICES[slide_type]
         slide_layout = prs.slide_layouts[layout_index]
         slide = prs.slides.add_slide(slide_layout)
 
-        # Render slide content using appropriate handler
         try:
             handler = SLIDE_HANDLERS[slide_type]
             handler(slide, slide_data)
@@ -496,7 +484,6 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
         except Exception as e:
             print(f"✗ Error rendering slide {slide_data.get('slide_number')}: {e}")
 
-    # Save presentation
     prs.save(output_path)
     print(f"\n✓ Presentation saved to: {output_path}")
 
@@ -504,12 +491,10 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
 if __name__ == "__main__":
     print("=== RUNNING LOCAL GENERATE_PPT.PY ===\n")
 
-    # Default file paths
     TEMPLATE_PATH = "template.pptx"
     JSON_PATH = "claude_output.json"
     OUTPUT_PATH = "output.pptx"
 
-    # Validate inputs
     if not Path(TEMPLATE_PATH).exists():
         print(f"Error: Template file not found: {TEMPLATE_PATH}")
         exit(1)
@@ -518,6 +503,5 @@ if __name__ == "__main__":
         print(f"Error: JSON file not found: {JSON_PATH}")
         exit(1)
 
-    # Generate presentation
     print("Starting PowerPoint generation...\n")
     generate_presentation(TEMPLATE_PATH, JSON_PATH, OUTPUT_PATH)

@@ -20,7 +20,7 @@
         "type": "key_insights",
         "title": "Key Insights",
         "content": {
-          "insights": [
+          "bullets": [
             "Revenue grew 23% year-over-year, exceeding targets",
             "Customer retention improved to 94%, up from 89%",
             "New product line accounts for 18% of total revenue",
