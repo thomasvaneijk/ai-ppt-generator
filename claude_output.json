@@ -1,19 +1,19 @@
 {
   "presentation": {
-    "title": "Customer Satisfaction Analysis 2024",
-    "subtitle": "KTV Performance Review & Strategic Priorities",
+    "title": "Customer Satisfaction Performance Review",
+    "subtitle": "KTV Analysis & Strategic Priorities",
     "language": "en",
     "audience": "senior_management",
     "slides": [
       {
         "slide_number": 1,
         "type": "title",
-        "title": "Customer Satisfaction Analysis 2024",
+        "title": "Customer Satisfaction Performance Review",
         "content": {
-          "subtitle": "KTV Performance Review & Strategic Priorities"
+          "subtitle": "KTV Analysis & Strategic Priorities"
         },
         "visuals": {},
-        "speaker_note": "This presentation covers 12 months of customer satisfaction data across all journeys and products, with clear recommendations for improvement."
+        "speaker_note": "12-month KTV analysis covering all customer journeys with concrete improvement recommendations for management decision."
       },
       {
         "slide_number": 2,
@@ -21,85 +21,82 @@
         "title": "Executive Summary",
         "content": {
           "bullets": [
-            "Overall customer satisfaction averaged 7.6 over the past year—solid but with clear room for improvement",
-            "Maintenance journey achieves highest satisfaction (8.1), setting the benchmark for process excellence",
-            "Breakdown journey scores lowest (7.2), driven by waiting times and unclear follow-up communication",
-            "Product performance ranges from 7.3 to 8.0, with heat pumps requiring focused attention on planning and communication",
-            "Strategic opportunity: replicate Maintenance strengths in underperforming journeys"
+            "Maintenance journey achieves strong performance at 8.1 KTV—above our 8.0 excellence threshold",
+            "Breakdown & Repair journey scores 7.2, falling below the 7.5 attention threshold and representing our primary risk area",
+            "Purchase journey (7.8) and Customer Service (7.4) perform adequately but show clear opportunity for improvement",
+            "Root cause analysis reveals communication clarity and waiting time transparency as key satisfaction drivers",
+            "Strategic opportunity: replicate Maintenance excellence across underperforming journeys"
           ]
         },
         "visuals": {},
-        "speaker_note": "Key message: We have a proven playbook for high satisfaction (Maintenance), and clear data on where to focus improvement efforts."
+        "speaker_note": "Key message: We have a proven model for high satisfaction in Maintenance. The challenge is scaling those practices to Breakdown and Customer Service."
       },
       {
         "slide_number": 3,
         "type": "chart",
-        "title": "Satisfaction by Customer Journey",
+        "title": "Customer Journey Performance Overview",
         "content": {
           "chart_type": "column",
           "data": {
-            "categories": ["Maintenance", "Breakdown", "Purchase", "Customer Service"],
+            "categories": ["Maintenance", "Purchase Journey", "Customer Service", "Breakdown & Repair"],
             "series": [
               {
-                "name": "Average KTV Score",
-                "values": [8.1, 7.2, 7.8, 7.4]
+                "name": "KTV Score",
+                "values": [8.1, 7.8, 7.4, 7.2]
               }
             ]
           }
         },
         "visuals": {},
-        "speaker_note": "Maintenance sets the gold standard at 8.1. Breakdown lags significantly at 7.2—nearly a full point below. This gap represents our primary improvement opportunity."
+        "speaker_note": "Note the 0.9-point gap between highest (Maintenance) and lowest (Breakdown). This is not marginal—it represents fundamentally different customer experiences."
       },
       {
         "slide_number": 4,
-        "type": "chart",
-        "title": "Satisfaction by Product Category",
+        "type": "key_insights",
+        "title": "Success Blueprint: Maintenance Journey",
         "content": {
-          "chart_type": "column",
-          "data": {
-            "categories": ["Maintenance Contracts", "Heat Pumps", "Solar Panels", "Boilers"],
-            "series": [
-              {
-                "name": "Average KTV Score",
-                "values": [8.0, 7.3, 7.9, 7.5]
-              }
-            ]
-          }
+          "bullets": [
+            "Maintenance achieves 8.1 KTV through clear communication and predictable service delivery",
+            "Customers value scheduled appointments with confirmed time windows and proactive updates",
+            "Technicians consistently praised for punctuality and professional execution",
+            "Gas boiler maintenance contracts benefit from established routines and customer familiarity",
+            "Proven formula: clarity + predictability + professionalism = high satisfaction"
+          ]
         },
         "visuals": {},
-        "speaker_note": "Maintenance contracts perform strongest, while heat pumps show the most opportunity for improvement. The 0.7-point spread indicates meaningful variation in customer experience."
+        "speaker_note": "Maintenance is our benchmark. It proves we can deliver excellent customer experiences when process and communication are aligned."
       },
       {
         "slide_number": 5,
         "type": "key_insights",
-        "title": "What Drives High Satisfaction",
+        "title": "Critical Challenge: Breakdown Journey",
         "content": {
           "bullets": [
-            "Maintenance journey scores 8.1 due to clear, proactive communication throughout the process",
-            "Customers value predictable scheduling and transparent expectations setting",
-            "Technician professionalism and first-time-right execution consistently praised",
-            "Maintenance contracts (8.0) benefit from ongoing relationship and familiarity",
-            "Success formula: clarity + predictability + communication = satisfaction"
+            "Breakdown & Repair scores 7.2, driven by inherent customer stress during service disruption",
+            "Waiting times for technician arrival and parts delivery create frustration and uncertainty",
+            "Unclear next steps and status updates amplify customer anxiety during breakdown situations",
+            "Heat pump and boiler breakdowns particularly challenging due to heating dependency",
+            "Gap to Maintenance (0.9 points) indicates fixable process issues, not technical capability"
           ]
         },
         "visuals": {},
-        "speaker_note": "Maintenance is our proof point. Customers reward us when we set clear expectations, communicate proactively, and deliver consistently."
+        "speaker_note": "Customers don't expect instant repairs—they expect transparency. The problem isn't our technical response; it's communication during uncertainty."
       },
       {
         "slide_number": 6,
         "type": "key_insights",
-        "title": "Critical Improvement Areas",
+        "title": "Root Cause Analysis",
         "content": {
           "bullets": [
-            "Breakdown journey (7.2) suffers from excessive waiting times and unclear status updates during resolution",
-            "Customer service (7.4) receives praise for friendliness but criticism for long handling times",
-            "Heat pump customers (7.3) are satisfied with end results but frustrated by planning delays and communication gaps",
-            "Common thread: uncertainty and waiting time erode satisfaction across all pain points",
-            "Root cause: operational execution issues, not product or service quality"
+            "Clear communication and punctuality are the strongest drivers of satisfaction across all journeys",
+            "Waiting times damage satisfaction only when combined with unclear status updates or uncertain timelines",
+            "Purchase journey (7.8) succeeds because onboarding sets clear expectations from the start",
+            "Customer Service (7.4) faces similar challenges to Breakdown: responsiveness perceived as slow despite friendly interactions",
+            "Pattern: customers reward transparency and predictability, penalize uncertainty"
           ]
         },
         "visuals": {},
-        "speaker_note": "The problems are operational and fixable. Customers aren't questioning our technical quality—they're frustrated by process inefficiencies and communication gaps."
+        "speaker_note": "This is the insight: satisfaction correlates more strongly with communication quality than with technical outcomes. Fix communication, fix satisfaction."
       },
       {
         "slide_number": 7,
@@ -107,61 +104,61 @@
         "title": "Strategic Assessment",
         "content": {
           "left_column": {
-            "heading": "Our Strengths",
+            "heading": "What Works",
             "items": [
-              "Maintenance process delivers 8.1 satisfaction through clear communication",
-              "Technical quality and end results consistently meet expectations",
-              "Customer service teams praised for professionalism and friendliness"
+              "Maintenance journey delivers 8.1+ satisfaction through structured communication",
+              "Purchase onboarding creates clear customer expectations",
+              "Technical quality and end results consistently meet customer needs"
             ]
           },
           "right_column": {
-            "heading": "Improvement Opportunities",
+            "heading": "What Needs Attention",
             "items": [
-              "Breakdown response times and status communication require immediate attention",
-              "Heat pump planning and scheduling processes need streamlining",
-              "Customer service handling times impacting overall experience despite strong interpersonal skills"
+              "Breakdown journey requires proactive status updates and clearer timelines",
+              "Customer Service response times need improvement or better expectation setting",
+              "Waiting time transparency missing across multiple touchpoints"
             ]
           }
         },
         "visuals": {},
-        "speaker_note": "This is not a product problem or a people problem—it's a process problem. We have the blueprint for success in Maintenance; we need to scale it."
+        "speaker_note": "Left side shows we know how to deliver. Right side shows where to apply that knowledge. This is an execution gap, not a capability gap."
       },
       {
         "slide_number": 8,
         "type": "recommendation",
-        "title": "Recommended Action Plan",
+        "title": "Action Plan: Close the Experience Gap",
         "content": {
-          "recommendation": "Implement Maintenance communication playbook across Breakdown and Heat Pump journeys, with immediate focus on status transparency and expectation management",
+          "recommendation": "Deploy Maintenance journey communication standards to Breakdown and Customer Service, focusing on proactive updates and clear timeline expectations",
           "rationale": [
-            "Maintenance journey proves that proactive communication drives satisfaction—we already know what works",
-            "Breakdown and Heat Pump journeys share the same root cause: unclear status updates and uncertain timelines",
-            "Customer service handling time can be reduced through process optimization, not headcount increases"
+            "Maintenance journey proves that structured communication drives satisfaction—we have the blueprint",
+            "Breakdown and Customer Service share the same root issue: customers lack visibility into progress and next steps",
+            "Communication improvements require minimal investment compared to operational changes, yet deliver measurable satisfaction gains"
           ],
           "next_steps": [
-            "Deploy Maintenance communication templates to Breakdown teams within 30 days",
-            "Implement automated status updates for heat pump planning and installation phases",
-            "Conduct process mapping workshop for customer service to identify handling time bottlenecks",
-            "Establish monthly KTV monitoring dashboard with journey-specific targets"
+            "Implement automated status updates for breakdown service requests (ETA, technician assigned, parts ordered)",
+            "Adopt Maintenance-style confirmation protocols for customer service interactions (expected resolution time, follow-up schedule)",
+            "Establish KTV monitoring dashboard with journey-specific targets and monthly review cadence",
+            "Conduct customer feedback sessions specifically on heat pump and solar panel service experiences to identify product-specific pain points"
           ]
         },
         "visuals": {},
-        "speaker_note": "This recommendation is low-cost and high-impact. We're not inventing new solutions—we're scaling proven practices from Maintenance to underperforming areas."
+        "speaker_note": "This is a scale problem, not an innovation problem. We're not asking for new capabilities—we're replicating what already works in Maintenance."
       },
       {
         "slide_number": 9,
         "type": "appendix",
-        "title": "Methodology & Scope",
+        "title": "Methodology & Context",
         "content": {
           "items": [
-            "Data period: 12-month rolling average (past year)",
-            "Measurement: KTV score (1-10 scale) collected post-interaction",
-            "Journeys analyzed: Maintenance, Breakdown, Purchase, Customer Service",
-            "Products analyzed: Maintenance contracts, Heat pumps, Solar panels, Boilers",
-            "Qualitative feedback: Customer verbatims analyzed for recurring themes"
+            "KTV measured on 1-10 scale, collected post-interaction across all customer touchpoints",
+            "Data period: Rolling 12-month average",
+            "Performance benchmarks: >8.0 considered strong, <7.5 requires attention",
+            "Journeys analyzed: Maintenance, Breakdown & Repair, Purchase, Customer Service",
+            "Products in scope: Gas boiler maintenance contracts, Heat pumps, Solar panels"
           ]
         },
         "visuals": {},
-        "speaker_note": "All data validated through customer feedback management system. Minimum sample sizes met for statistical reliability across all segments."
+        "speaker_note": "All scores validated through customer feedback system. Qualitative insights based on verbatim analysis and support ticket themes."
       }
     ]
   }
