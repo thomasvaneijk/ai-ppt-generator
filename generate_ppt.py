@@ -10,6 +10,8 @@ import json
 from pathlib import Path
 from pptx import Presentation
 from pptx.util import Pt
+from pptx.chart.data import ChartData
+from pptx.enum.chart import XL_CHART_TYPE
 
 
 # Layout indices in template.pptx
@@ -98,8 +100,114 @@ def create_key_insights_slide(slide, slide_data: dict):
 
 
 def create_chart_slide(slide, slide_data: dict):
-    """Render a chart slide (not yet implemented)."""
-    raise NotImplementedError("Chart slide type not yet implemented")
+    """
+    Render a chart slide.
+
+    Expected layout:
+    - Placeholder 0: Title
+    - Placeholder 1: Chart placeholder
+
+    Expected JSON content:
+    {
+      "chart_type": "column" | "bar" | "line" | "pie",
+      "data": {
+        "categories": [...],
+        "series": [{"name": "...", "values": [...]}]
+      }
+    }
+    """
+    title = slide_data.get("title", "")
+    content = slide_data.get("content", {})
+    chart_type = content.get("chart_type", "column")
+    data = content.get("data", {})
+
+    # Set title
+    if len(slide.shapes.placeholders) > 0:
+        title_placeholder = slide.shapes.placeholders[0]
+        title_placeholder.text = title
+    else:
+        raise ValueError(
+            "Chart slide layout must have a title placeholder at index 0. "
+            "Check that template.pptx layout index 2 is correctly configured."
+        )
+
+    # Validate chart data structure
+    categories = data.get("categories", [])
+    series_list = data.get("series", [])
+
+    if not categories:
+        raise ValueError(
+            f"Chart slide {slide_data.get('slide_number')}: 'categories' is empty or missing in JSON data"
+        )
+
+    if not series_list:
+        raise ValueError(
+            f"Chart slide {slide_data.get('slide_number')}: 'series' is empty or missing in JSON data"
+        )
+
+    # Validate that all series have matching value counts
+    expected_count = len(categories)
+    for series in series_list:
+        series_values = series.get("values", [])
+        if len(series_values) != expected_count:
+            raise ValueError(
+                f"Chart slide {slide_data.get('slide_number')}: Series '{series.get('name')}' has "
+                f"{len(series_values)} values but should have {expected_count} (matching categories)"
+            )
+
+    # Prepare chart data
+    chart_data = ChartData()
+    chart_data.categories = categories
+
+    for series in series_list:
+        series_name = series.get("name", "Series")
+        series_values = series.get("values", [])
+        chart_data.add_series(series_name, series_values)
+
+    # Map chart type string to PowerPoint enum
+    chart_type_map = {
+        "column": XL_CHART_TYPE.COLUMN_CLUSTERED,
+        "bar": XL_CHART_TYPE.BAR_CLUSTERED,
+        "line": XL_CHART_TYPE.LINE,
+        "pie": XL_CHART_TYPE.PIE,
+    }
+
+    if chart_type not in chart_type_map:
+        raise ValueError(
+            f"Chart slide {slide_data.get('slide_number')}: Unsupported chart type '{chart_type}'. "
+            f"Supported types: {list(chart_type_map.keys())}"
+        )
+
+    xl_chart_type = chart_type_map[chart_type]
+
+    # Find and validate chart placeholder
+    if len(slide.shapes.placeholders) < 2:
+        raise ValueError(
+            f"Chart slide layout must have at least 2 placeholders (title + chart). "
+            f"Found {len(slide.shapes.placeholders)}. "
+            f"Check that template.pptx layout index 2 has a chart placeholder."
+        )
+
+    # Insert chart into placeholder 1
+    try:
+        chart_placeholder = slide.shapes.placeholders[1]
+        chart = chart_placeholder.insert_chart(xl_chart_type, chart_data)
+    except AttributeError:
+        raise ValueError(
+            f"Placeholder at index 1 in layout 2 is not a chart placeholder. "
+            f"In PowerPoint, ensure layout index 2 has a 'Chart' content placeholder, not just a text box."
+        )
+    except Exception as e:
+        raise ValueError(
+            f"Failed to insert chart into placeholder: {str(e)}. "
+            f"Verify that template.pptx layout index 2 has a proper chart placeholder."
+        )
+
+    # Add speaker notes if present
+    speaker_note = slide_data.get("speaker_note", "")
+    if speaker_note:
+        notes_slide = slide.notes_slide
+        notes_slide.notes_text_frame.text = speaker_note
 
 
 def create_two_column_slide(slide, slide_data: dict):
@@ -128,6 +236,33 @@ SLIDE_HANDLERS = {
 }
 
 
+def validate_template(prs: Presentation):
+    """
+    Validate that the PowerPoint template has the required layouts.
+
+    Raises detailed error messages if the template is misconfigured.
+    """
+    num_layouts = len(prs.slide_layouts)
+    required_layouts = max(LAYOUT_INDICES.values()) + 1  # Indices are 0-based
+
+    if num_layouts < required_layouts:
+        raise ValueError(
+            f"Template validation failed: Expected at least {required_layouts} layouts, "
+            f"but template has only {num_layouts}.\n"
+            f"Required layout indices: {LAYOUT_INDICES}\n"
+            f"Please ensure template.pptx has layouts for all slide types."
+        )
+
+    print(f"✓ Template validated: {num_layouts} layouts found")
+
+    # Warn about chart layout (most common misconfiguration)
+    chart_layout_index = LAYOUT_INDICES.get("chart")
+    if chart_layout_index is not None:
+        chart_layout = prs.slide_layouts[chart_layout_index]
+        print(f"  - Chart layout (index {chart_layout_index}): '{chart_layout.name}'")
+        print(f"    → Ensure this layout has a chart placeholder, not just a content placeholder")
+
+
 def generate_presentation(template_path: str, json_path: str, output_path: str):
     """
     Main function: Generate PowerPoint from JSON slide model.
@@ -139,6 +274,9 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
     """
     # Load template
     prs = Presentation(template_path)
+
+    # Validate template structure
+    validate_template(prs)
 
     # Load JSON model
     data = load_json_model(json_path)

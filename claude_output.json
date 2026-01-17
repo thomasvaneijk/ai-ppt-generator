@@ -1,0 +1,138 @@
+{
+  "presentation": {
+    "title": "Q4 Strategic Review",
+    "subtitle": "Internal Strategy Discussion",
+    "language": "nl",
+    "audience": "senior_management",
+    "slides": [
+      {
+        "slide_number": 1,
+        "type": "title",
+        "title": "Q4 Strategic Review",
+        "content": {
+          "subtitle": "Performance Analysis & Recommendations"
+        },
+        "visuals": {},
+        "speaker_note": "Welcome everyone to the Q4 review. We'll cover key metrics and strategic recommendations."
+      },
+      {
+        "slide_number": 2,
+        "type": "key_insights",
+        "title": "Key Insights",
+        "content": {
+          "insights": [
+            "Revenue grew 23% year-over-year, exceeding targets",
+            "Customer retention improved to 94%, up from 89%",
+            "New product line accounts for 18% of total revenue",
+            "Operational costs decreased by 12% through automation",
+            "Market share increased in 3 out of 4 key segments"
+          ]
+        },
+        "visuals": {},
+        "speaker_note": "These five insights form the foundation of our success this quarter."
+      },
+      {
+        "slide_number": 3,
+        "type": "chart",
+        "title": "Revenue Growth Trajectory",
+        "content": {
+          "chart_type": "column",
+          "data": {
+            "categories": ["Q1", "Q2", "Q3", "Q4"],
+            "series": [
+              {
+                "name": "2024",
+                "values": [2.1, 2.3, 2.5, 2.8]
+              },
+              {
+                "name": "2025",
+                "values": [2.5, 2.9, 3.2, 3.4]
+              }
+            ]
+          }
+        },
+        "visuals": {},
+        "speaker_note": "Notice the consistent growth pattern, with Q4 2025 showing the strongest performance."
+      },
+      {
+        "slide_number": 4,
+        "type": "chart",
+        "title": "Market Share Distribution",
+        "content": {
+          "chart_type": "pie",
+          "data": {
+            "categories": ["Product A", "Product B", "Product C", "Product D"],
+            "series": [
+              {
+                "name": "Market Share",
+                "values": [35, 28, 22, 15]
+              }
+            ]
+          }
+        },
+        "visuals": {},
+        "speaker_note": "Product A continues to dominate with 35% market share."
+      },
+      {
+        "slide_number": 5,
+        "type": "two_column",
+        "title": "Opportunities & Challenges",
+        "content": {
+          "left_column": {
+            "heading": "Opportunities",
+            "items": [
+              "Expanding into European markets",
+              "AI-driven product enhancements",
+              "Strategic partnerships with tier-1 vendors"
+            ]
+          },
+          "right_column": {
+            "heading": "Challenges",
+            "items": [
+              "Increased competition in core segments",
+              "Talent acquisition in key technical roles",
+              "Regulatory compliance in new markets"
+            ]
+          }
+        },
+        "visuals": {},
+        "speaker_note": "Balancing opportunities with realistic risk assessment is critical for 2026 planning."
+      },
+      {
+        "slide_number": 6,
+        "type": "recommendation",
+        "title": "Strategic Recommendations",
+        "content": {
+          "recommendation": "Accelerate European expansion while consolidating North American market leadership",
+          "rationale": [
+            "European market projected to grow 40% over next 3 years",
+            "Strong brand recognition already established in UK and Germany",
+            "Regulatory environment favorable for our product category"
+          ],
+          "next_steps": [
+            "Establish European headquarters in Amsterdam by Q2 2026",
+            "Hire regional sales team (12 FTE)",
+            "Localize product offerings for EU compliance"
+          ]
+        },
+        "visuals": {},
+        "speaker_note": "This recommendation requires board approval and a budget allocation of €2.5M."
+      },
+      {
+        "slide_number": 7,
+        "type": "appendix",
+        "title": "Methodology & Data Sources",
+        "content": {
+          "items": [
+            "Revenue data: Internal ERP system (SAP)",
+            "Market share: Gartner Industry Report Q4 2025",
+            "Customer retention: CRM analytics (Salesforce)",
+            "Growth projections: Internal forecasting model v3.2"
+          ]
+        },
+        "visuals": {},
+        "speaker_note": "All data has been verified by the finance team and external auditors."
+      }
+    ]
+  }
+}
