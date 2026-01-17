@@ -58,7 +58,13 @@ def debug_print_placeholders(slide, slide_type: str):
         except:
             pass
 
-        print(f"  - idx={placeholder.placeholder_format.idx}, type={ph_type}, shape_type={shape_type}")
+        idx = "UNKNOWN"
+        try:
+            idx = placeholder.placeholder_format.idx
+        except:
+            pass
+
+        print(f"  - idx={idx}, type={ph_type}, shape_type={shape_type}")
 
 
 def get_title_placeholder(slide):
@@ -68,6 +74,8 @@ def get_title_placeholder(slide):
     Returns the title placeholder or None if not found.
     """
     for shape in slide.shapes:
+        if not hasattr(shape, 'is_placeholder'):
+            continue
         if shape.is_placeholder:
             try:
                 if shape.placeholder_format.type == PP_PLACEHOLDER.TITLE:
@@ -84,6 +92,8 @@ def get_body_placeholder(slide):
     Returns the body placeholder or None if not found.
     """
     for shape in slide.shapes:
+        if not hasattr(shape, 'is_placeholder'):
+            continue
         if shape.is_placeholder:
             try:
                 ph_type = shape.placeholder_format.type
@@ -101,7 +111,10 @@ def get_chart_placeholder(slide):
 
     Returns the chart placeholder or None if not found.
     """
+    # First try to find explicit CHART type
     for shape in slide.shapes:
+        if not hasattr(shape, 'is_placeholder'):
+            continue
         if shape.is_placeholder:
             try:
                 if shape.placeholder_format.type == PP_PLACEHOLDER.CHART:
@@ -109,14 +122,14 @@ def get_chart_placeholder(slide):
             except:
                 pass
 
-    # Fallback: look for OBJECT type placeholder (sometimes charts are OBJECT type)
+    # Fallback: look for OBJECT type placeholder
     for shape in slide.shapes:
+        if not hasattr(shape, 'is_placeholder'):
+            continue
         if shape.is_placeholder:
             try:
                 if shape.placeholder_format.type == PP_PLACEHOLDER.OBJECT:
-                    # Check if it supports chart insertion
-                    if hasattr(shape, 'insert_chart'):
-                        return shape
+                    return shape
             except:
                 pass
 
@@ -489,6 +502,8 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
 
 
 if __name__ == "__main__":
+    print("=== RUNNING LOCAL GENERATE_PPT.PY ===\n")
+
     # Default file paths
     TEMPLATE_PATH = "template.pptx"
     JSON_PATH = "claude_output.json"
