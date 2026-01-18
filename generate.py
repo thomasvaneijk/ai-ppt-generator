@@ -40,13 +40,26 @@ def main():
     print("  AUTONOMOUS PRESENTATION GENERATION PIPELINE")
     print("="*70)
 
+    # Get script directory to ensure correct paths
+    script_dir = Path(__file__).parent.absolute()
+
+    # Change to script directory
+    import os
+    original_dir = Path.cwd()
+    os.chdir(script_dir)
+
+    print(f"  Working directory: {script_dir}")
+    print("="*70)
+
     # Check prerequisites
     if not Path("template.pptx").exists():
         print("✗ ERROR: template.pptx not found")
+        print(f"  Looking in: {script_dir}")
         sys.exit(1)
 
     if not Path("claude_output.json").exists():
         print("✗ ERROR: claude_output.json not found")
+        print(f"  Looking in: {script_dir}")
         sys.exit(1)
 
     # Step 1: Creative Director (Pre-render Intelligence)

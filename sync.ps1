@@ -1,4 +1,10 @@
 # Quick sync script - pull latest changes without running generation
+
+# Ensure we're in the script directory
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $ScriptDir
+
+Write-Host "Working directory: $ScriptDir" -ForegroundColor Cyan
 Write-Host "Syncing with remote repository..." -ForegroundColor Cyan
 
 $currentBranch = git rev-parse --abbrev-ref HEAD
