@@ -25,7 +25,7 @@ The system:
 .\run.ps1
 ```
 
-This automatically syncs the latest version and generates the presentation.
+This automatically syncs the latest version and runs the full creative pipeline.
 
 **Option 2: Manual execution**
 
@@ -33,7 +33,14 @@ This automatically syncs the latest version and generates the presentation.
 # Sync latest version
 git pull origin claude/powerpoint-generation-mvp-HdREb
 
-# Generate presentation
+# Run full pipeline (creative director + rendering)
+python generate.py
+```
+
+**Option 3: Direct rendering (skip creative review)**
+
+```powershell
+# Generate directly from claude_output.json
 python generate_ppt.py
 ```
 
@@ -162,17 +169,22 @@ critique.json          # Feedback on visual quality
 
 ```
 ai-ppt-generator/
-├── generate_ppt.py          # Main renderer (JSON → PPT)
-├── claude_output.json       # Input: presentation content
+├── generate.py              # 🎯 MAIN ENTRY POINT (orchestrates full pipeline)
+├── creative_director.py     # ✨ Pre-render creative intelligence layer
+├── generate_ppt.py          # Renderer (JSON → PPT)
+│
+├── claude_output.json       # Input: raw presentation content
+├── creative_output.json     # Intermediate: refined content after creative review
+├── output.pptx              # Output: final presentation
+│
 ├── template.pptx            # Corporate template (styling, layouts)
-├── config.json              # Configuration (iterations, scoring)
+├── config.json              # Configuration (iterations, scoring, creative settings)
 ├── run.ps1                  # Helper script (auto-sync + generate)
 │
 ├── render_slides.py         # Slide renderer (PPT → PNG)
 ├── critique_slides.py       # Visual critic (PNG → critique)
 ├── iterate.py               # Iteration orchestrator
 │
-├── output.pptx              # Generated presentation
 ├── renders/                 # Rendered slide images (Windows only)
 └── critique.json            # Visual quality feedback (Windows only)
 ```
@@ -181,14 +193,16 @@ ai-ppt-generator/
 
 ## 🎨 Supported Slide Types
 
-The system supports 6 slide types:
+The system fully supports 6 slide types:
 
-1. **title** - Title slide with optional subtitle
-2. **key_insights** - Bullet points (max 5 per slide)
-3. **chart** - Data visualization (column, bar, line, pie)
-4. **two_column** - Left/right content split
-5. **recommendation** - Strategic recommendation with rationale and next steps
-6. **appendix** - Supplementary information
+1. **title** - Title slide with optional subtitle ✓
+2. **key_insights** - Bullet points (max 5 per slide) ✓
+3. **chart** - Data visualization (column, bar, line, pie) ✓
+4. **two_column** - Left/right content split (TODO)
+5. **recommendation** - Strategic recommendation with rationale and next steps ✓
+6. **appendix** - Supplementary information ✓
+
+**Note:** Two-column slides are not yet implemented. Use key_insights or split into multiple slides as a workaround.
 
 ---
 
@@ -227,9 +241,9 @@ Edit `config.json` to adjust:
    - Automatic JSON modification not yet implemented
    - Requires manual editing based on critique feedback
 
-4. **Slide types limited to 6 core types**
+4. **Two-column slide type not yet implemented**
    - Additional types (e.g., timeline, process flow) not yet supported
-   - Workaround: adapt content to closest available type
+   - Workaround: adapt content to key_insights or split into multiple slides
 
 5. **No image generation**
    - Visual descriptions in JSON are documentation only
@@ -247,31 +261,43 @@ Edit `config.json` to adjust:
 
 ## 📖 Usage Examples
 
-### Example 1: Generate from Command Line
+### Example 1: Full Pipeline (Recommended)
+
+```powershell
+python generate.py
+```
+
+This runs:
+1. Creative Director review (claude_output.json → creative_output.json)
+2. PowerPoint generation (creative_output.json → output.pptx)
+
+Result: `output.pptx` created with full creative intelligence applied
+
+### Example 2: Direct Generation (Skip Creative Review)
 
 ```powershell
 python generate_ppt.py
 ```
 
-Result: `output.pptx` created from `claude_output.json`
+Result: `output.pptx` created directly from `claude_output.json` (or `creative_output.json` if it exists)
 
-### Example 2: Run Full Feedback Loop (Windows Only)
+### Example 3: Run Full Feedback Loop (Windows Only)
 
 ```powershell
 python iterate.py
 ```
 
 This runs:
-1. `generate_ppt.py` → creates `output.pptx`
+1. `generate.py` → creates `creative_output.json` and `output.pptx`
 2. `render_slides.py` → creates `renders/slide_*.png`
 3. `critique_slides.py` → creates `critique.json`
 4. Checks if score ≥ 8/10, repeats if needed (max 3 iterations)
 
-### Example 3: Manual Rendering
+### Example 4: Manual Rendering
 
 ```powershell
-# Generate presentation
-python generate_ppt.py
+# Generate presentation with creative review
+python generate.py
 
 # Render slides (Windows + PowerPoint required)
 python render_slides.py --input output.pptx --output renders

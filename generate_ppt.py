@@ -252,11 +252,116 @@ def create_two_column_slide(slide, slide_data: dict):
 
 
 def create_recommendation_slide(slide, slide_data: dict):
-    raise NotImplementedError("Recommendation slide type not yet implemented")
+    """
+    Recommendation slide layout:
+    - Title
+    - Recommendation (main text)
+    - Rationale (bullets)
+    - Next Steps (bullets)
+    """
+    debug_print_placeholders(slide, "recommendation")
+    title = slide_data.get("title", "")
+    content = slide_data.get("content", {})
+
+    recommendation = content.get("recommendation", "")
+    rationale = content.get("rationale", [])
+    next_steps = content.get("next_steps", [])
+
+    # Set title
+    title_placeholder = get_title_placeholder(slide)
+    if title_placeholder:
+        title_placeholder.text = title
+    else:
+        raise ValueError(f"Recommendation slide has no title placeholder.\n{list_all_placeholders(slide)}")
+
+    # Set body content
+    body_placeholder = get_body_placeholder(slide)
+    if not body_placeholder:
+        raise ValueError(f"Recommendation slide has no body placeholder.\n{list_all_placeholders(slide)}")
+
+    text_frame = body_placeholder.text_frame
+    text_frame.clear()
+
+    # Add recommendation as bold headline
+    if recommendation:
+        p = text_frame.paragraphs[0]
+        p.text = recommendation
+        p.level = 0
+        # Make it bold for emphasis
+        for run in p.runs:
+            run.font.bold = True
+
+    # Add rationale section
+    if rationale:
+        p = text_frame.add_paragraph()
+        p.text = "Why:"
+        p.level = 0
+        for run in p.runs:
+            run.font.bold = True
+
+        for bullet in rationale:
+            p = text_frame.add_paragraph()
+            p.text = bullet
+            p.level = 1
+
+    # Add next steps section
+    if next_steps:
+        p = text_frame.add_paragraph()
+        p.text = "Next Steps:"
+        p.level = 0
+        for run in p.runs:
+            run.font.bold = True
+
+        for step in next_steps:
+            p = text_frame.add_paragraph()
+            p.text = step
+            p.level = 1
+
+    # Add speaker note
+    speaker_note = slide_data.get("speaker_note", "")
+    if speaker_note:
+        slide.notes_slide.notes_text_frame.text = speaker_note
 
 
 def create_appendix_slide(slide, slide_data: dict):
-    raise NotImplementedError("Appendix slide type not yet implemented")
+    """
+    Appendix slide layout:
+    - Title
+    - Items (bullet list)
+    """
+    debug_print_placeholders(slide, "appendix")
+    title = slide_data.get("title", "")
+    content = slide_data.get("content", {})
+    items = content.get("items", [])
+
+    # Set title
+    title_placeholder = get_title_placeholder(slide)
+    if title_placeholder:
+        title_placeholder.text = title
+    else:
+        raise ValueError(f"Appendix slide has no title placeholder.\n{list_all_placeholders(slide)}")
+
+    # Set body content
+    body_placeholder = get_body_placeholder(slide)
+    if not body_placeholder:
+        raise ValueError(f"Appendix slide has no body placeholder.\n{list_all_placeholders(slide)}")
+
+    text_frame = body_placeholder.text_frame
+    text_frame.clear()
+
+    # Add items as bullets
+    for idx, item in enumerate(items):
+        if idx == 0:
+            p = text_frame.paragraphs[0]
+        else:
+            p = text_frame.add_paragraph()
+        p.text = item
+        p.level = 0
+
+    # Add speaker note
+    speaker_note = slide_data.get("speaker_note", "")
+    if speaker_note:
+        slide.notes_slide.notes_text_frame.text = speaker_note
 
 
 SLIDE_HANDLERS = {
@@ -293,25 +398,37 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
         slide_type = slide_data.get("type")
 
         if slide_type not in LAYOUT_INDICES:
-            print(f"Warning: Unknown slide type '{slide_type}', skipping slide {slide_data.get('slide_number')}")
+            print(f"✗ Unknown slide type '{slide_type}', skipping slide {slide_data.get('slide_number')}")
             continue
 
         if slide_type not in SLIDE_HANDLERS:
-            print(f"Warning: No handler for slide type '{slide_type}', skipping slide {slide_data.get('slide_number')}")
+            print(f"✗ No handler for slide type '{slide_type}', skipping slide {slide_data.get('slide_number')}")
             continue
 
         layout_index = LAYOUT_INDICES[slide_type]
         slide_layout = prs.slide_layouts[layout_index]
         slide = prs.slides.add_slide(slide_layout)
+        slide_index = len(prs.slides) - 1  # Track position for deletion if needed
 
         try:
             handler = SLIDE_HANDLERS[slide_type]
             handler(slide, slide_data)
             print(f"✓ Generated slide {slide_data.get('slide_number')}: {slide_type}")
         except NotImplementedError as e:
-            print(f"✗ Skipped slide {slide_data.get('slide_number')}: {e}")
+            # Remove the empty slide we just added
+            rId = prs.slides._sldIdLst[slide_index].rId
+            prs.part.drop_rel(rId)
+            del prs.slides._sldIdLst[slide_index]
+            print(f"✗ Removed slide {slide_data.get('slide_number')}: {e}")
         except Exception as e:
-            print(f"✗ Error rendering slide {slide_data.get('slide_number')}: {e}")
+            # Remove the empty slide we just added
+            try:
+                rId = prs.slides._sldIdLst[slide_index].rId
+                prs.part.drop_rel(rId)
+                del prs.slides._sldIdLst[slide_index]
+                print(f"✗ Removed slide {slide_data.get('slide_number')}: Rendering failed - {e}")
+            except:
+                print(f"✗ Error rendering slide {slide_data.get('slide_number')}: {e} (could not remove empty slide)")
 
     prs.save(output_path)
     print(f"\n✓ Presentation saved to: {output_path}")
@@ -319,7 +436,9 @@ def generate_presentation(template_path: str, json_path: str, output_path: str):
 
 if __name__ == "__main__":
     TEMPLATE_PATH = "template.pptx"
-    JSON_PATH = "claude_output.json"
+    # Prefer creative_output.json if it exists (from creative director)
+    # Fall back to claude_output.json for direct rendering
+    JSON_PATH = "creative_output.json" if Path("creative_output.json").exists() else "claude_output.json"
     OUTPUT_PATH = "output.pptx"
 
     if not Path(TEMPLATE_PATH).exists():

@@ -3,6 +3,13 @@ output.pptx
 *.pptx
 !template.pptx
 
+# Generated JSON files
+creative_output.json
+critique.json
+
+# Rendered slides
+renders/
+
 # Python cache
 __pycache__/
 *.py[cod]
