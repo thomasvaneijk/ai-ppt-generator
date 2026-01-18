@@ -1,6 +1,6 @@
 {
   "max_iterations": 3,
-  "target_score": 8.0,
+  "target_score": 8.5,
   "creative_director": {
     "max_title_words": 6,
     "max_bullets": 5,

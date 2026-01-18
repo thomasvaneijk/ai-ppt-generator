@@ -1,12 +1,19 @@
+#!/usr/bin/env python3
 """
 Iterative Presentation Improvement Engine
 
-Orchestrates the generate → render → critique → improve loop.
+Orchestrates the full creative feedback loop:
+1. Generate presentation (creative director + rendering)
+2. Render slides to PNG (Windows only)
+3. AI vision critique
+4. Apply improvements automatically
+5. Repeat until quality threshold reached
 """
 
 import json
 import subprocess
 import sys
+import os
 from pathlib import Path
 
 
@@ -21,24 +28,26 @@ def load_config():
     # Default configuration
     return {
         "max_iterations": 3,
-        "target_score": 8.0
+        "target_score": 8.5
     }
 
 
-def run_command(command: list, description: str):
+def run_command(command: list, description: str, allow_failure: bool = False) -> bool:
     """Run a command and handle errors."""
-    print(f"\n{'='*60}")
+    print(f"\n{'='*70}")
     print(f"  {description}")
-    print(f"{'='*60}")
+    print(f"{'='*70}")
 
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, capture_output=False, text=True)
 
     if result.returncode != 0:
-        print(f"\n✗ Error running: {' '.join(command)}")
-        print(result.stderr)
-        return False
+        if not allow_failure:
+            print(f"\n✗ Error running: {' '.join(command)}")
+            return False
+        else:
+            print(f"\n⚠ Warning: Command failed (non-critical)")
+            return True
 
-    print(result.stdout)
     return True
 
 
@@ -53,63 +62,49 @@ def load_critique():
         return json.load(f)
 
 
-def apply_improvements(critique_data: dict) -> bool:
-    """
-    Apply improvements based on critique.
-
-    This is a placeholder for the improvement logic.
-    In production, this would:
-    - Parse critique actions
-    - Modify claude_output.json accordingly
-    - Adjust titles, bullet counts, layout choices
-
-    Returns True if improvements were applied.
-    """
-    # TODO: Implement actual improvement logic
-    # For now, this is a placeholder that would need:
-    # - Action parsing (e.g., "shorten title" → reduce title word count)
-    # - JSON modification (e.g., edit claude_output.json)
-    # - Layout adjustments (e.g., change slide type if needed)
-
-    print("\n[INFO] Improvement application not yet implemented.")
-    print("[INFO] This is where we would:")
-    print("  - Parse critique actions")
-    print("  - Modify claude_output.json")
-    print("  - Adjust titles, bullets, or layouts")
-
-    return False  # No improvements applied yet
-
-
 def iterate_improvements():
     """
     Main iteration loop.
 
-    1. Generate PowerPoint (generate_ppt.py)
+    Flow:
+    1. Generate presentation (generate.py)
     2. Render slides to PNG (render_slides.py)
-    3. Critique slides (critique_slides.py)
-    4. Check if target score reached
-    5. If not, apply improvements and repeat
+    3. AI vision critique (vision_feedback.py)
+    4. Apply improvements (improvement_engine.py)
+    5. Check if target score reached, repeat if not
     """
     config = load_config()
-    max_iterations = config["max_iterations"]
-    target_score = config["target_score"]
+    max_iterations = config.get("max_iterations", 3)
+    target_score = config.get("target_score", 8.5)
 
-    print("="*60)
-    print("  ITERATIVE PRESENTATION IMPROVEMENT ENGINE")
-    print("="*60)
+    print("="*70)
+    print("  ITERATIVE CREATIVE IMPROVEMENT ENGINE")
+    print("="*70)
     print(f"  Max iterations: {max_iterations}")
     print(f"  Target score: {target_score}/10")
-    print("="*60)
+    print("="*70)
+
+    # Check prerequisites
+    has_api_key = bool(os.getenv("ANTHROPIC_API_KEY"))
+    if not has_api_key:
+        print("\n⚠ WARNING: ANTHROPIC_API_KEY not set")
+        print("  Vision feedback will not work without API key")
+        print("  Set it with: export ANTHROPIC_API_KEY=your-key")
+        print("\nContinuing without vision feedback (heuristic fallback)...\n")
+
+    # Determine which JSON to use as starting point
+    input_json = "creative_output.json" if Path("creative_output.json").exists() else "claude_output.json"
 
     for iteration in range(1, max_iterations + 1):
-        print(f"\n\n{'#'*60}")
+        print(f"\n\n{'#'*70}")
         print(f"  ITERATION {iteration}/{max_iterations}")
-        print(f"{'#'*60}")
+        print(f"{'#'*70}")
 
         # Step 1: Generate PowerPoint
+        print(f"\n[STEP 1] Generating presentation from {input_json}")
         if not run_command(
-            [sys.executable, "generate_ppt.py"],
-            f"Step 1/{iteration}: Generating PowerPoint"
+            [sys.executable, "generate.py"],
+            f"Iteration {iteration}: Full Pipeline (Creative Director + Rendering)"
         ):
             print("✗ Failed to generate PowerPoint")
             return False
@@ -119,29 +114,116 @@ def iterate_improvements():
             print("✗ output.pptx not found after generation")
             return False
 
-        # Step 2: Render slides (skip on non-Windows or if COM unavailable)
-        print("\n[INFO] Slide rendering requires Windows + PowerPoint.")
-        print("[INFO] Run manually: python render_slides.py")
-        print("[INFO] Skipping render step in this iteration.")
+        # Step 2: Render slides (Windows + PowerPoint required)
+        print(f"\n[STEP 2] Rendering slides to PNG")
+        if sys.platform != "win32":
+            print("⚠ Skipping render step (requires Windows + PowerPoint)")
+            print("  To use full feedback loop, run on Windows")
+            break
 
-        # For now, skip rendering and critique
-        # In production on Windows, these would run:
-        # run_command([sys.executable, "render_slides.py"], ...)
-        # run_command([sys.executable, "critique_slides.py"], ...)
+        if not run_command(
+            [sys.executable, "render_slides.py", "--input", "output.pptx", "--output", "renders"],
+            f"Iteration {iteration}: Rendering Slides",
+            allow_failure=True
+        ):
+            print("⚠ Rendering failed - continuing without visual feedback")
+            break
 
-        print("\n[INFO] Rendering and critique not executed (Windows-only).")
-        print("[INFO] To complete the loop on Windows:")
-        print("  1. Run: python render_slides.py")
-        print("  2. Run: python critique_slides.py")
-        print("  3. Check critique.json for feedback")
+        # Check if renders exist
+        if not Path("renders").exists() or not list(Path("renders").glob("slide_*.png")):
+            print("⚠ No rendered slides found - skipping critique")
+            break
 
-        break  # Exit after first iteration since we can't render
+        # Step 3: AI Vision Critique
+        print(f"\n[STEP 3] AI vision critique")
 
-    print("\n✓ Iteration complete.")
-    print("\nTo use the full feedback loop on Windows:")
-    print("  1. Ensure PowerPoint is installed")
-    print("  2. Install: pip install pywin32")
-    print("  3. Run: python iterate.py")
+        if has_api_key:
+            # Use AI vision feedback
+            if not run_command(
+                [sys.executable, "vision_feedback.py", "--input", "renders", "--output", "critique.json"],
+                f"Iteration {iteration}: AI Vision Critique",
+                allow_failure=True
+            ):
+                print("⚠ Vision critique failed - using heuristic fallback")
+                run_command(
+                    [sys.executable, "critique_slides.py", "--input", "renders", "--output", "critique.json"],
+                    "Fallback: Heuristic Critique",
+                    allow_failure=True
+                )
+        else:
+            # Fallback to heuristic critique
+            if not run_command(
+                [sys.executable, "critique_slides.py", "--input", "renders", "--output", "critique.json"],
+                f"Iteration {iteration}: Heuristic Critique (no API key)",
+                allow_failure=True
+            ):
+                print("⚠ Critique failed - cannot continue iteration")
+                break
+
+        # Load critique results
+        critique_data = load_critique()
+        if not critique_data:
+            print("✗ No critique.json found - cannot apply improvements")
+            break
+
+        avg_score = critique_data.get("average_score", 0)
+        print(f"\n{'='*70}")
+        print(f"  SCORE: {avg_score:.1f}/10 (target: {target_score}/10)")
+        print(f"{'='*70}")
+
+        # Check if target reached
+        if avg_score >= target_score:
+            print(f"\n✓ TARGET REACHED: {avg_score:.1f} ≥ {target_score}")
+            print(f"✓ Presentation quality meets threshold after {iteration} iteration(s)")
+            return True
+
+        # Check if this is last iteration
+        if iteration == max_iterations:
+            print(f"\n⚠ Max iterations reached ({max_iterations})")
+            print(f"  Final score: {avg_score:.1f}/{target_score}")
+            print(f"  Presentation may benefit from manual review")
+            break
+
+        # Step 4: Apply improvements
+        print(f"\n[STEP 4] Applying improvements for next iteration")
+
+        # Determine input/output for improvement engine
+        improvement_input = "creative_output.json" if Path("creative_output.json").exists() else input_json
+        improvement_output = "improved_output.json"
+
+        if not run_command(
+            [sys.executable, "improvement_engine.py",
+             "--input", improvement_input,
+             "--critique", "critique.json",
+             "--output", improvement_output],
+            f"Iteration {iteration}: Applying Improvements",
+            allow_failure=True
+        ):
+            print("⚠ Improvement application failed - manual review recommended")
+            break
+
+        # Use improved output for next iteration
+        if Path(improvement_output).exists():
+            # Copy improved_output.json to creative_output.json for next render
+            import shutil
+            shutil.copy(improvement_output, "creative_output.json")
+            input_json = "creative_output.json"
+            print(f"✓ Improvements applied - will use {improvement_output} for next iteration")
+        else:
+            print("⚠ No improved output generated - stopping iteration")
+            break
+
+    # Final summary
+    final_critique = load_critique()
+    if final_critique:
+        final_score = final_critique.get("average_score", 0)
+        print(f"\n{'='*70}")
+        print(f"  FINAL RESULT")
+        print(f"{'='*70}")
+        print(f"  Final Score: {final_score:.1f}/10")
+        print(f"  Target: {target_score}/10")
+        print(f"  Status: {'✓ MEETS THRESHOLD' if final_score >= target_score else '✗ BELOW THRESHOLD'}")
+        print(f"{'='*70}\n")
 
     return True
 

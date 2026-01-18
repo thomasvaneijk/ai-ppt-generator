@@ -166,6 +166,15 @@ def create_key_insights_slide(slide, slide_data: dict):
 
 
 def create_chart_slide(slide, slide_data: dict):
+    """
+    Create chart slide with storytelling enhancements.
+
+    Enhancements:
+    - Data labels (when requested)
+    - Legend removal (when requested)
+    - Chart enlargement (when requested)
+    - Visual emphasis markers
+    """
     debug_print_placeholders(slide, "chart")
     title = slide_data.get("title", "")
     content = slide_data.get("content", {})
@@ -216,6 +225,13 @@ def create_chart_slide(slide, slide_data: dict):
     if not chart_placeholder:
         raise ValueError(f"Chart slide has no chart placeholder.\n{list_all_placeholders(slide)}")
 
+    # Check for visual emphasis (enlarge chart)
+    visual_emphasis = content.get("visual_emphasis")
+    if visual_emphasis == "large_chart":
+        # Enlarge chart placeholder by 20%
+        chart_placeholder.width = int(chart_placeholder.width * 1.2)
+        chart_placeholder.height = int(chart_placeholder.height * 1.2)
+
     chart = None
     try:
         if DEBUG:
@@ -241,6 +257,36 @@ def create_chart_slide(slide, slide_data: dict):
 
     if not chart:
         raise ValueError(f"Chart creation failed")
+
+    # Apply chart storytelling enhancements
+    try:
+        chart_obj = chart.chart
+
+        # Show/hide legend based on data
+        show_legend = data.get("show_legend", True)
+        if hasattr(chart_obj, 'has_legend'):
+            chart_obj.has_legend = show_legend
+
+        # Add data labels if requested
+        show_data_labels = data.get("show_data_labels", False)
+        if show_data_labels and hasattr(chart_obj, 'plots'):
+            for plot in chart_obj.plots:
+                plot.has_data_labels = True
+                if hasattr(plot.data_labels, 'font'):
+                    plot.data_labels.font.size = Pt(10)
+
+        # Simplify gridlines (less clutter)
+        if hasattr(chart_obj, 'value_axis'):
+            value_axis = chart_obj.value_axis
+            if hasattr(value_axis, 'has_major_gridlines'):
+                value_axis.has_major_gridlines = True
+            if hasattr(value_axis, 'has_minor_gridlines'):
+                value_axis.has_minor_gridlines = False
+
+    except Exception as e:
+        # Chart enhancement failed, but chart exists - continue
+        if DEBUG:
+            print(f"[DEBUG] Chart enhancement warning: {e}")
 
     speaker_note = slide_data.get("speaker_note", "")
     if speaker_note:

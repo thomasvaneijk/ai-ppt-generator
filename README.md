@@ -10,8 +10,11 @@ An autonomous system that generates professional, story-driven PowerPoint presen
 The system:
 1. Designs a logical slide narrative
 2. Generates structured JSON (single source of truth)
-3. Renders PowerPoint using `python-pptx`
-4. (Optional) Iteratively improves visual quality based on rendered slide critique
+3. **Creative Director** - Pre-render intelligence (removes weak slides, rewrites titles, trims bullets)
+4. Renders PowerPoint using `python-pptx` with **chart storytelling** (data labels, emphasis)
+5. **AI Vision Critique** - Analyzes rendered slides using Claude Vision API (alignment, hierarchy, density)
+6. **Improvement Engine** - Automatically applies fixes based on critique
+7. Iterates until visual quality threshold reached (≥8.5/10)
 
 ---
 
@@ -146,21 +149,40 @@ AFTER:  Strong title + professional subtitle + visual guidance
 - Story flow beats completeness
 - Remove, don't dilute
 
-### Visual Feedback Loop (Optional, Windows-only)
+### Phase 3+ AI Vision Feedback Loop (IMPLEMENTED)
 
 ```
 output.pptx
        ↓
-render_slides.py       # PowerPoint → PNG images (requires Windows + PowerPoint)
+render_slides.py           # PowerPoint → PNG images (requires Windows + PowerPoint)
        ↓
 renders/slide_*.png
        ↓
-critique_slides.py     # Visual analysis → critique.json
+vision_feedback.py         # 🤖 AI vision critique using Claude Vision API
+       ├─ Analyzes: alignment, hierarchy, text density, balance
+       ├─ Scores: 0-10 per slide (target ≥8.5)
+       └─ Outputs: concrete actionable fixes
        ↓
-critique.json          # Feedback on visual quality
+critique.json              # AI-powered feedback
        ↓
-[iterate.py]           # Apply improvements and repeat
+improvement_engine.py      # 🔧 Automatically applies fixes
+       ├─ Trim bullets
+       ├─ Shorten titles
+       ├─ Enlarge charts
+       ├─ Add visual emphasis
+       └─ Split/merge slides
+       ↓
+improved_output.json       # Enhanced presentation JSON
+       ↓
+[Re-render and iterate until score ≥8.5]
 ```
+
+**Key Features:**
+- ✅ **Real AI Vision** - Claude analyzes actual slide images, not heuristics
+- ✅ **Automatic Improvements** - Fixes applied without manual intervention
+- ✅ **Chart Storytelling** - Data labels, legend control, gridline simplification
+- ✅ **Quality Threshold** - Iterates until presentation reaches consultant-grade (≥8.5/10)
+- ✅ **Fallback Support** - Works without API key (heuristic mode)
 
 ---
 
@@ -170,11 +192,20 @@ critique.json          # Feedback on visual quality
 
 - Python 3.8+
 - `pip install -r requirements.txt`
+- Includes: `python-pptx`, `anthropic`
 
-### Visual Feedback Loop (Windows Only)
+### AI Vision Feedback (Phase 3+)
+
+- **Anthropic API key** (for Claude Vision)
+- Set environment variable: `export ANTHROPIC_API_KEY=your-key`
+- Get API key from: https://console.anthropic.com/
+- **Note:** System works without API key (fallback to heuristic critique)
+
+### Visual Rendering (Windows Only)
 
 - Microsoft PowerPoint installed
 - `pip install pywin32`
+- Required for: `render_slides.py`, full iteration loop
 
 ---
 
@@ -184,22 +215,26 @@ critique.json          # Feedback on visual quality
 ai-ppt-generator/
 ├── generate.py              # 🎯 MAIN ENTRY POINT (orchestrates full pipeline)
 ├── creative_director.py     # ✨ Pre-render creative intelligence layer
-├── generate_ppt.py          # Renderer (JSON → PPT)
+├── generate_ppt.py          # Renderer (JSON → PPT) with chart storytelling
 │
 ├── claude_output.json       # Input: raw presentation content
 ├── creative_output.json     # Intermediate: refined content after creative review
+├── improved_output.json     # Intermediate: enhanced after AI critique (auto-generated)
 ├── output.pptx              # Output: final presentation
 │
 ├── template.pptx            # Corporate template (styling, layouts)
 ├── config.json              # Configuration (iterations, scoring, creative settings)
 ├── run.ps1                  # Helper script (auto-sync + generate)
+├── sync.ps1                 # Quick sync without generation
 │
-├── render_slides.py         # Slide renderer (PPT → PNG)
-├── critique_slides.py       # Visual critic (PNG → critique)
-├── iterate.py               # Iteration orchestrator
+├── render_slides.py         # Slide renderer (PPT → PNG, Windows only)
+├── vision_feedback.py       # 🤖 AI vision critique (Claude Vision API)
+├── critique_slides.py       # Heuristic critic (fallback, no API key needed)
+├── improvement_engine.py    # 🔧 Automatic improvement application
+├── iterate.py               # Full iteration orchestrator
 │
 ├── renders/                 # Rendered slide images (Windows only)
-└── critique.json            # Visual quality feedback (Windows only)
+└── critique.json            # Visual quality feedback
 ```
 
 ---
@@ -238,37 +273,52 @@ Edit `config.json` to adjust:
 
 ## 🚨 Known Limitations
 
-### Current State
+### Current State (Phase 3+ IMPLEMENTED)
 
-1. **Visual feedback loop requires Windows**
+1. **Visual feedback loop requires Windows** ⚠️
    - Slide rendering uses PowerPoint COM automation
    - Not available on macOS/Linux
+   - **Status:** Platform limitation, cannot be resolved without PowerPoint
 
-2. **Critique is placeholder-based**
-   - Actual visual analysis not yet implemented
-   - Heuristic scoring returns default values
-   - Production version would use PIL/OCR/vision APIs
+2. **✅ AI Vision Critique IMPLEMENTED (Phase 3+)**
+   - Uses Claude Vision API to analyze actual slide images
+   - Judges: alignment, hierarchy, text density, balance, template-likeness
+   - Outputs: concrete actionable fixes (not vague suggestions)
+   - **Fallback:** Heuristic critique works without API key
 
-3. **Improvement application is manual**
-   - `iterate.py` shows where improvements would be applied
-   - Automatic JSON modification not yet implemented
-   - Requires manual editing based on critique feedback
+3. **✅ Automatic Improvement Engine IMPLEMENTED (Phase 3+)**
+   - Reads critique.json and applies fixes automatically
+   - Actions: trim bullets, shorten titles, enlarge charts, split slides
+   - Modifies JSON and triggers re-rendering
+   - **Status:** Fully autonomous improvement loop
 
-4. **Two-column slide type not yet implemented**
+4. **✅ Chart Storytelling IMPLEMENTED (Phase 3+)**
+   - Data labels (show/hide based on JSON config)
+   - Legend control (remove when not needed)
+   - Gridline simplification (less clutter)
+   - Chart enlargement (visual emphasis)
+   - **Status:** Charts now tell stories, not just display data
+
+5. **Two-column slide type not yet implemented** ⚠️
    - Additional types (e.g., timeline, process flow) not yet supported
    - Workaround: adapt content to key_insights or split into multiple slides
+   - **Priority:** Low (5 of 6 core types implemented)
 
-5. **No image generation**
+6. **No image generation** ⚠️
    - Visual descriptions in JSON are documentation only
    - Actual image insertion not implemented
    - Workaround: manually add images to template after generation
+   - **Future:** DALL-E/Stable Diffusion integration planned
 
 ### Recommended Next Steps
 
-- Implement actual image analysis in `critique_slides.py` (PIL, OCR)
-- Build automatic improvement engine in `iterate.py`
-- Add support for custom slide types
-- Implement image placeholder support
+- ~~Implement actual image analysis~~ ✅ DONE (vision_feedback.py using Claude Vision)
+- ~~Build automatic improvement engine~~ ✅ DONE (improvement_engine.py)
+- ~~Add chart storytelling~~ ✅ DONE (data labels, legend control, gridlines)
+- Implement two-column slide type handler
+- Add image generation (DALL-E/Stable Diffusion integration)
+- Implement visual emphasis shapes (background boxes, section dividers)
+- Add support for custom slide types (timeline, process flow, comparison matrix)
 
 ---
 
@@ -294,17 +344,24 @@ python generate_ppt.py
 
 Result: `output.pptx` created directly from `claude_output.json` (or `creative_output.json` if it exists)
 
-### Example 3: Run Full Feedback Loop (Windows Only)
+### Example 3: Run Full AI Vision Feedback Loop (Phase 3+, Windows Only)
 
 ```powershell
+# Set API key first
+$env:ANTHROPIC_API_KEY="your-api-key-here"
+
+# Run full iteration loop
 python iterate.py
 ```
 
 This runs:
 1. `generate.py` → creates `creative_output.json` and `output.pptx`
 2. `render_slides.py` → creates `renders/slide_*.png`
-3. `critique_slides.py` → creates `critique.json`
-4. Checks if score ≥ 8/10, repeats if needed (max 3 iterations)
+3. `vision_feedback.py` → AI vision critique → `critique.json`
+4. `improvement_engine.py` → applies fixes → `improved_output.json`
+5. Checks if score ≥ 8.5/10, repeats if needed (max 3 iterations)
+
+**Without API key:** Falls back to heuristic critique (`critique_slides.py`)
 
 ### Example 4: Manual Rendering
 
