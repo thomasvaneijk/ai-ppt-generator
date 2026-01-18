@@ -19,20 +19,33 @@ The system:
 
 ### For Colleagues: Generate a Presentation
 
-**Option 1: Using the auto-sync helper (recommended)**
+**SYNC FIRST (After I Make Changes)**
+
+```powershell
+# Windows
+.\sync.ps1
+
+# macOS/Linux
+./sync.sh
+```
+
+This pulls the latest code without running anything. Run this whenever you see files are out of sync.
+
+---
+
+**THEN GENERATE**
+
+**Option 1: Auto-sync + Generate (recommended)**
 
 ```powershell
 .\run.ps1
 ```
 
-This automatically syncs the latest version and runs the full creative pipeline.
+This automatically syncs the latest version AND runs the full creative pipeline.
 
-**Option 2: Manual execution**
+**Option 2: Manual execution (when already synced)**
 
 ```powershell
-# Sync latest version
-git pull origin claude/powerpoint-generation-mvp-HdREb
-
 # Run full pipeline (creative director + rendering)
 python generate.py
 ```
