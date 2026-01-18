@@ -1,6 +1,15 @@
 {
   "max_iterations": 3,
   "target_score": 8.0,
+  "creative_director": {
+    "max_title_words": 6,
+    "max_bullets": 5,
+    "min_bullets": 2,
+    "max_slides": 10,
+    "min_slides": 5,
+    "remove_appendix_if_long": true,
+    "enforce_strong_title_slide": true
+  },
   "rendering": {
     "resolution_width": 1920,
     "resolution_height": 1080,

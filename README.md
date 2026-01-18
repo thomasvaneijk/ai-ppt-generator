@@ -78,15 +78,53 @@ The AI will:
 
 ## 🏗️ System Architecture
 
-### Core Components
+### Core Flow with Creative Director (Phase 2)
 
 ```
-claude_output.json     # Single source of truth (content + structure)
+claude_output.json          # Raw content from AI
        ↓
-generate_ppt.py        # Renderer (JSON → PowerPoint)
+creative_director.py        # ✨ PRE-RENDER CREATIVE LAYER ✨
+       ├─ Remove weak slides
+       ├─ Rewrite titles for impact
+       ├─ Trim bullets to max 5
+       ├─ Ensure no empty slides
+       └─ Strengthen title slide
        ↓
-output.pptx            # Final presentation
+creative_output.json        # Refined, production-ready content
+       ↓
+generate_ppt.py             # Renderer (JSON → PowerPoint)
+       ↓
+output.pptx                 # Final presentation
 ```
+
+### What the Creative Director Does
+
+The **Creative Director** acts like a senior consultant reviewing a deck before production.
+
+**It makes bold decisions:**
+- ✗ **Removes** redundant or weak slides
+- ✎ **Rewrites** long titles (max 6 words ideal)
+- ✎ **Trims** bullet lists to max 5 points
+- ✎ **Ensures** title slide is never empty (adds subtitle + visual guidance)
+- ✓ **Preserves** critical slides (title, recommendations)
+
+**Example transformations:**
+```
+BEFORE: "Executive Summary of Customer Satisfaction Performance" (7 words)
+AFTER:  "Executive Summary" (2 words)
+
+BEFORE: 8 bullets on one slide
+AFTER:  5 bullets (top insights only)
+
+BEFORE: Empty title slide with no subtitle
+AFTER:  Strong title + professional subtitle + visual guidance
+```
+
+**Philosophy:**
+- Every slide must earn its place
+- Visual hierarchy beats information density
+- Story flow beats completeness
+- Remove, don't dilute
 
 ### Visual Feedback Loop (Optional, Windows-only)
 
